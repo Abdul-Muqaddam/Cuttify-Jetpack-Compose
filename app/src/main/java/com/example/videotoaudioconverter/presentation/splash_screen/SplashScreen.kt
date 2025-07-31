@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.material3.Button
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,7 +23,7 @@ import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
 
 @Composable
-fun SplashScreen() {
+fun SplashScreen(navigateToHome: () -> Unit) {
     val progress = remember { Animatable(0f) }
 
     LaunchedEffect(Unit) {
@@ -30,6 +31,7 @@ fun SplashScreen() {
             targetValue = 1f,
             animationSpec = tween(durationMillis = 5000)
         )
+        navigateToHome()
     }
 
     Column(
