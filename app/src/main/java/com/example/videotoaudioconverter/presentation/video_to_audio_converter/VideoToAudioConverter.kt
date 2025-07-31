@@ -18,64 +18,49 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.example.videotoaudioconverter.R
 import com.example.videotoaudioconverter.presentation.all_folder.AllFolder
-import com.example.videotoaudioconverter.presentation.home_screen.component.VerticalSpacer
+import com.example.videotoaudioconverter.presentation.all_folder.VideoToAudioConverterViewModel
 import com.example.videotoaudioconverter.presentation.all_video_files.AllVideoFiles
+import com.example.videotoaudioconverter.presentation.home_screen.component.VerticalSpacer
+import com.example.videotoaudioconverter.presentation.video_to_audio_converter.component.TopBar
 import com.example.videotoaudioconverter.ui.theme.MyColors
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun VideoToAudioConverterScreen(navigateBack: () -> Unit) {
-
+fun VideoToAudioConverterScreen(
+    navigateBack: () -> Unit,
+    viewModel: VideoToAudioConverterViewModel = koinViewModel()
+) {
+    val context= LocalContext.current
+    val state by viewModel.state.collectAsState()
     val pagerState = rememberPagerState(initialPage = 0, pageCount = { 2 })
     val scope = rememberCoroutineScope()
 
 
 
     Scaffold(topBar = {
-        Row(
-            modifier = Modifier
-                .statusBarsPadding()
-                .padding(top = 3.sdp, start = 18.sdp, end = 18.sdp)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Image(
-                    modifier = Modifier
-                        .size(20.sdp)
-                        .clickable() {
-                            navigateBack()
-                        },
-                    painter = painterResource(R.drawable.ic_back_arrow),
-                    contentDescription = null
-                )
-                Text(
-                    modifier = Modifier.padding(start = 4.sdp),
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 22.ssp,
-                    text = stringResource(R.string.select_video),
-                    color = MyColors.MainColor
-                )
-            }
-            Image(
-                modifier = Modifier.size(24.sdp),
-                painter = painterResource(R.drawable.ic_search),
-                contentDescription = null
-            )
-        }
+        TopBar(state=state, navigateBack=navigateBack, searchIconClicked = {
+            viewModel.SearchIconClicked()
+        }, crossIconClicked = {
+            viewModel.CrossIconClicked()
+        }, onSearchChange = {
+            viewModel.onSearchChange(value = it,context=context)
+        })
     }) { paddingValues ->
         Column(
             modifier = Modifier
@@ -139,7 +124,9 @@ fun VideoToAudioConverterScreen(navigateBack: () -> Unit) {
                 state = pagerState
             ) { page ->
                 when (page) {
-                    0 -> AllVideoFiles()
+                    0 -> AllVideoFiles(state=state, listOfAllVideos = {
+                        viewModel.saveAllVideos(it)
+                    })
                     1 -> AllFolder()
 
                 }

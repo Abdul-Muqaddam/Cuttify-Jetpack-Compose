@@ -21,4 +21,24 @@
     <string name="permission_denied">Permission Denied</string>
     <string name="all">All</string>
     <string name="folder">Folder</string>
+    <string name="search">Search</string>
+    <string name="enjoy_all_premium_features">Enjoy all premium features</string>
+    <string name="general">General</string>
+    <string name="select_languauges">Select Languauges</string>
+    <string name="phone_default">Phone Default</string>
+    <string name="notifications">Notifications</string>
+    <string name="enable_recommended_notifications">Enable Recommended Notifications</string>
+    <string name="about">About</string>
+    <string name="feedback">Feedback</string>
+    <string name="let_us_know_your_experience_with_app">Let us Know your experience with app</string>
+    <string name="rate_us">Rate Us</string>
+    <string name="give_us_rating_how_much_you_like_app">Give us rating how much you like app</string>
+    <string name="share_app">Share App</string>
+    <string name="give_us_a_help_to_share_this_app">Give us a help to share this app</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="learn_our_terms_conditions"><![CDATA[Learn Our Terms & Conditions]]></string>
+    <string name="version">Version</string>
+    <string name="_1_01">1.01</string>
+    <string name="languages">Languages</string>
+    <string name="english">English</string>
 </resources>

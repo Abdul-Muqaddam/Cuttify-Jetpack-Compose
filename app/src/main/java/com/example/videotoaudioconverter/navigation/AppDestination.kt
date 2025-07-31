@@ -14,6 +14,9 @@ class AppDestination(private val navController: NavController) {
     fun navigateToVideoToAudioConverterScreen(){
         navController.navigate(Routes.VideoToAudioConverterRoute)
     }
+    fun navigateToLanguageScreen(){
+        navController.navigate(Routes.LanguageScreenRoute)
+    }
     fun navigateBack(){
         navController.popBackStack()
     }

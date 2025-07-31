@@ -7,6 +7,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.videotoaudioconverter.presentation.LanguageScreen.LanguageScreen
 import com.example.videotoaudioconverter.presentation.main_screen.MainScreen
 import com.example.videotoaudioconverter.presentation.main_screen.permission.VideoAndPhotoPermission
 import com.example.videotoaudioconverter.presentation.setting_screen.SettingScreen
@@ -45,7 +46,13 @@ fun AppNavHost() {
 
 
         composable<Routes.SettingScreenRoute> {
-            SettingScreen()
+            SettingScreen(navigateToLanguageScreen = {
+                appDestination.navigateToLanguageScreen()
+            })
+        }
+
+        composable<Routes.LanguageScreenRoute> {
+            LanguageScreen()
         }
 
     }
