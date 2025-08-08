@@ -17,6 +17,15 @@ class AppDestination(private val navController: NavController) {
     fun navigateToLanguageScreen(){
         navController.navigate(Routes.LanguageScreenRoute)
     }
+    fun navigateToFeedbackScreen(){
+        navController.navigate(Routes.FeedbackScreenRoute)
+    }
+    fun navigateToSetRingtoneScreen(){
+        navController.navigate(Routes.SetRingtoneScreenRoute)
+    }
+    fun navigateToRateUsScreen(){
+        navController.navigate(Routes.RateUsScreenRoute)
+    }
     fun navigateBack(){
         navController.popBackStack()
     }

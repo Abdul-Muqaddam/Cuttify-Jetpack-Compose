@@ -31,7 +31,9 @@ import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
 
 @Composable
-fun SettingScreen(navigateToLanguageScreen:()-> Unit) {
+fun SettingScreen(navigateToLanguageScreen:()-> Unit,
+                  navigateToFeedbackScreen:()-> Unit,
+                  navigateToRateUsScreen:()-> Unit) {
     Column{
         Box(modifier = Modifier
             .fillMaxWidth()
@@ -113,12 +115,14 @@ fun SettingScreen(navigateToLanguageScreen:()-> Unit) {
             )
 
             SettingsScreenCard(
+                onClick = {navigateToFeedbackScreen()},
                 mainImg = R.drawable.ic_text,
                 mainText = R.string.feedback,
                 subText = R.string.let_us_know_your_experience_with_app,
                 rightImg = R.drawable.ic_front_arrow
             )
             SettingsScreenCard(
+                onClick = {navigateToRateUsScreen()},
                 mainImg = R.drawable.ic_rateing,
                 mainText = R.string.rate_us,
                 subText = R.string.give_us_rating_how_much_you_like_app,

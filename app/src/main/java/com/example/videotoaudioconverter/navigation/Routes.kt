@@ -20,4 +20,12 @@ sealed class Routes() {
 
     @Serializable
     object LanguageScreenRoute
+
+    @Serializable
+    object FeedbackScreenRoute
+
+    @Serializable
+    object SetRingtoneScreenRoute
+    @Serializable
+    object RateUsScreenRoute
 }

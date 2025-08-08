@@ -42,7 +42,10 @@ import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
 
 @Composable
-fun HomeScreen(navigateToSettingScreen: () -> Unit,navigateToVideToAudioConverter:()->Unit) {
+fun HomeScreen(navigateToSettingScreen: () -> Unit,
+               navigateToVideToAudioConverter: () -> Unit,
+               navigateToSetRingtoneScreen:()->Unit
+) {
     val context = LocalContext.current
     var isPermissionForVideoAndImage by remember { mutableStateOf(false) }
     var isPermissionPermanentlyDenied by remember { mutableStateOf(false) }
@@ -150,19 +153,22 @@ fun HomeScreen(navigateToSettingScreen: () -> Unit,navigateToVideToAudioConverte
                 imgWidth = 30,
                 imgHeight = 30,
                 img = R.drawable.ic_audio__player,
-                text = stringResource(R.string.audio_player)
+                text = stringResource(R.string.audio_player),
+                onClick = {}
             )
             FeatureCard(
                 imgWidth = 50,
                 imgHeight = 30,
                 img = R.drawable.ic_audio_cutter,
-                text = stringResource(R.string.audio_cutter)
+                text = stringResource(R.string.audio_cutter),
+                onClick = {}
             )
             FeatureCard(
                 imgWidth = 65,
                 imgHeight = 30,
                 img = R.drawable.ic_audio_merge,
-                text = stringResource(R.string.audio_merge)
+                text = stringResource(R.string.audio_merge),
+                onClick = {}
             )
         }
         VerticalSpacer(20)
@@ -173,19 +179,22 @@ fun HomeScreen(navigateToSettingScreen: () -> Unit,navigateToVideToAudioConverte
                 imgWidth = 30,
                 imgHeight = 30,
                 img = R.drawable.ic_video_cutter,
-                text = stringResource(R.string.video_cutter)
+                text = stringResource(R.string.video_cutter),
+                onClick = {}
             )
             FeatureCard(
                 imgWidth = 50,
                 imgHeight = 30,
                 img = R.drawable.ic_video_player,
-                text = stringResource(R.string.video_player)
+                text = stringResource(R.string.video_player),
+                onClick = {}
             )
             FeatureCard(
                 imgWidth = 65,
                 imgHeight = 30,
                 img = R.drawable.ic_ringtoon,
-                text = stringResource(R.string.set_ringtone)
+                text = stringResource(R.string.set_ringtone),
+                onClick = {navigateToSetRingtoneScreen()}
             )
         }
     }
@@ -251,7 +260,7 @@ fun HomeScreen(navigateToSettingScreen: () -> Unit,navigateToVideToAudioConverte
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
-                        isPermissionPermanentlyDenied = false
+                            isPermissionPermanentlyDenied = false
                         },
                     )
                 }

@@ -3,6 +3,7 @@ package com.example.videotoaudioconverter.presentation.home_screen.component
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -19,12 +20,13 @@ import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
 
 @Composable
-fun FeatureCard(imgWidth: Int, imgHeight: Int, img: Int, text: String) {
+fun FeatureCard(imgWidth: Int, imgHeight: Int, img: Int, text: String,onClick:()->Unit) {
 
     Column(
         modifier = Modifier
             .shadow(elevation = 5.sdp, shape = RoundedCornerShape(10.sdp))
             .background(color = Color.White)
+            .clickable { onClick() }
             .border(
                 width = 1.sdp,
                 color = MyColors.Green058,

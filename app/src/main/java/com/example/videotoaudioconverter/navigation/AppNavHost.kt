@@ -7,7 +7,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.videotoaudioconverter.presentation.FeedbackScreen.FeedbackScreen
 import com.example.videotoaudioconverter.presentation.LanguageScreen.LanguageScreen
+import com.example.videotoaudioconverter.presentation.RateUsScreen.RateUsScreen
+import com.example.videotoaudioconverter.presentation.SetRingtoneScreen.SetRingtoneScreen
 import com.example.videotoaudioconverter.presentation.main_screen.MainScreen
 import com.example.videotoaudioconverter.presentation.main_screen.permission.VideoAndPhotoPermission
 import com.example.videotoaudioconverter.presentation.setting_screen.SettingScreen
@@ -29,7 +32,10 @@ fun AppNavHost() {
                 appDestination.navigateToSettingsScreen()
             },navigateToVideToAudioConverter={
                 appDestination.navigateToVideoToAudioConverterScreen()
-            })
+            }, navigateToSetRingtoneScreen = {
+                appDestination.navigateToSetRingtoneScreen()
+            }
+            )
         }
         composable<Routes.VideoToAudioConverterRoute> {
             VideoToAudioConverterScreen(
@@ -48,11 +54,35 @@ fun AppNavHost() {
         composable<Routes.SettingScreenRoute> {
             SettingScreen(navigateToLanguageScreen = {
                 appDestination.navigateToLanguageScreen()
+            }, navigateToFeedbackScreen = {
+                appDestination.navigateToFeedbackScreen()
+            }, navigateToRateUsScreen = {
+                appDestination.navigateToRateUsScreen()
             })
         }
 
         composable<Routes.LanguageScreenRoute> {
-            LanguageScreen()
+            LanguageScreen(navigateBackToSettingScreen = {
+                appDestination.navigateToSettingsScreen()
+            })
+        }
+
+        composable<Routes.FeedbackScreenRoute> {
+            FeedbackScreen(navigateBackToSettingsScreen = {
+                appDestination.navigateToSettingsScreen()
+            })
+        }
+        composable<Routes.SetRingtoneScreenRoute> {
+            SetRingtoneScreen(navigateBackToMainScreen =  {
+                appDestination.navigateToMainScreen()
+            })
+        }
+        composable<Routes.RateUsScreenRoute> {
+            RateUsScreen(navigateBackToSettingScreen = {
+                appDestination.navigateToSettingsScreen()
+            }, navigateToSettingScreen = {
+                appDestination.navigateToSettingsScreen()
+            })
         }
 
     }
