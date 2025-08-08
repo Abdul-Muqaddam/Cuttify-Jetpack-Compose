@@ -2,7 +2,10 @@ package com.example.videotoaudioconverter.presentation.all_video_files.component
 
 import android.graphics.Bitmap
 import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,7 +35,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 @Composable
-fun EachVideoComponent(video: Uri) {
+fun EachVideoComponent(videoClicked:(Uri, String)->Unit, video: Uri, fileName: String) {
     val context = LocalContext.current
     var bitmap by remember { mutableStateOf<Bitmap?>(null) }
 
@@ -42,7 +45,10 @@ fun EachVideoComponent(video: Uri) {
         }
     }
 
-    Column {
+    val interactionSource=remember { MutableInteractionSource() }
+    Column (modifier = Modifier.clickable(indication = null, interactionSource = interactionSource){
+        videoClicked(video,fileName)
+    }){
 
         bitmap?.let {
             Box() {
@@ -78,7 +84,7 @@ fun EachVideoComponent(video: Uri) {
                 .padding(4.sdp)
                 .size(90.sdp)
         )
-        val fileName = getFileName(context = context, uri = video)
+//        val fileName = getFileName(context = context, uri = video)
         Text(fontSize = 12.ssp, color = MyColors.Green058, text = fileName, maxLines = 1)
     }
 }
