@@ -4,10 +4,15 @@ import kotlinx.serialization.Serializable
 
 sealed class Routes() {
     @Serializable
-    object SplashScreenRoute
+    data class EachVideoPreviewAndPlayerRoute(
+        val videoUriString: String,
+        val videoTitle: String
+    )
 
     @Serializable
-    object HomeScreenRoute
+    data class SuccessScreenRoute(val fileName: String,val filePath: String)
+    @Serializable
+    object SplashScreenRoute
 
     @Serializable
     object SettingScreenRoute

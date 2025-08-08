@@ -41,4 +41,11 @@
     <string name="_1_01">1.01</string>
     <string name="languages">Languages</string>
     <string name="english">English</string>
+    <string name="format">Format</string>
+    <string name="bitrate">Bitrate</string>
+    <string name="convert">Convert</string>
+    <string name="rename">Rename</string>
+    <string name="video_to_audio">Video To Audio</string>
+    <string name="completed_successfully">Completed Successfully</string>
+    <string name="you_may_also_need">You may Also need</string>
 </resources>

@@ -19,7 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 @Composable
-fun AllVideoFiles(state: VideoToAudioConverterViewModelState, listOfAllVideos:(List<Uri>)-> Unit) {
+fun AllVideoFiles(videoClicked:(Uri, String)->Unit, state: VideoToAudioConverterViewModelState, listOfAllVideos:(List<Uri>)-> Unit) {
     val context = LocalContext.current
 
 
@@ -36,7 +36,9 @@ fun AllVideoFiles(state: VideoToAudioConverterViewModelState, listOfAllVideos:(L
         TopBarFilter(state.filteredVideos.size)
         LazyVerticalGrid(columns = GridCells.Fixed(3)) {
             items(state.filteredVideos) { item ->
-                EachVideoComponent(item)
+                EachVideoComponent(videoClicked={videoUri,videoTitle->
+                    videoClicked(videoUri,videoTitle)
+                }, video = item.uri, fileName = item.fileName)
             }
         }
     }

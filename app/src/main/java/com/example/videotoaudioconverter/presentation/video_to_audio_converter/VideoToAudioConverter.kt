@@ -1,5 +1,6 @@
 package com.example.videotoaudioconverter.presentation.video_to_audio_converter
 
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -43,6 +44,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun VideoToAudioConverterScreen(
+    videoClicked:(Uri, String)->Unit,
     navigateBack: () -> Unit,
     viewModel: VideoToAudioConverterViewModel = koinViewModel()
 ) {
@@ -59,7 +61,7 @@ fun VideoToAudioConverterScreen(
         }, crossIconClicked = {
             viewModel.CrossIconClicked()
         }, onSearchChange = {
-            viewModel.onSearchChange(value = it,context=context)
+            viewModel.onSearchChange(value = it)
         })
     }) { paddingValues ->
         Column(
@@ -124,8 +126,10 @@ fun VideoToAudioConverterScreen(
                 state = pagerState
             ) { page ->
                 when (page) {
-                    0 -> AllVideoFiles(state=state, listOfAllVideos = {
-                        viewModel.saveAllVideos(it)
+                    0 -> AllVideoFiles(videoClicked = {videoUri,videoTitle->
+                        videoClicked(videoUri,videoTitle)
+                    }, state=state, listOfAllVideos = {
+                        viewModel.saveAllVideos(videos = it,context=context)
                     })
                     1 -> AllFolder()
 

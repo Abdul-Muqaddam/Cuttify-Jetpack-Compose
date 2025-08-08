@@ -2,6 +2,7 @@ package com.example.videotoaudioconverter.presentation.all_folder
 
 import android.content.Context
 import android.net.Uri
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.videotoaudioconverter.presentation.all_video_files.components.getFileName
@@ -16,9 +17,14 @@ data class VideoToAudioConverterViewModelState(
     val IdealTopBar: Boolean = true,
     val SearchTopBar: Boolean = false,
     val searchText: String = "",
-    val allVideos: List<Uri> = emptyList(),
-    val filteredVideos: List<Uri> = emptyList(),
+    val allVideos: List<VideoFiles> = emptyList(),
+    val filteredVideos: List<VideoFiles> = emptyList(),
     val fileTitle: String = ""
+)
+
+data class VideoFiles(
+    val uri: Uri,
+    val fileName: String
 )
 
 class VideoToAudioConverterViewModel : ViewModel() {
@@ -43,7 +49,7 @@ class VideoToAudioConverterViewModel : ViewModel() {
         }
     }
 
-    fun onSearchChange(context: Context, value: String) {
+    fun onSearchChange(value: String) {
         viewModelScope.launch(Dispatchers.IO) {
 
             _state.update {
@@ -52,7 +58,8 @@ class VideoToAudioConverterViewModel : ViewModel() {
                     it.allVideos
                 } else {
                     it.allVideos.filter { uri ->
-                        getFileName(context, uri).contains(value, ignoreCase = true)
+                        uri.fileName.contains(value, ignoreCase = true)
+                        //                        getFileName(context, uri).contains(value, ignoreCase = true)
                     }
                 }
 
@@ -64,14 +71,21 @@ class VideoToAudioConverterViewModel : ViewModel() {
         }
     }
 
-    fun saveAllVideos(videos: List<Uri>) {
-        _state.update {
-            it.copy(
-                allVideos = videos,
-                filteredVideos = videos
-            )
+    fun saveAllVideos(context: Context, videos: List<Uri>) {
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val videosFile = videos.map {
+                VideoFiles(
+                    uri = it,
+                    fileName = getFileName(context = context, uri = it)
+                )
+            }
+            _state.update {
+                it.copy(
+                    allVideos = videosFile,
+                    filteredVideos = videosFile
+                )
+            }
         }
     }
-
-
 }
