@@ -1,6 +1,8 @@
 package com.example.videotoaudioconverter.presentation.video_to_audio_converter
 
 import android.net.Uri
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -42,13 +44,15 @@ import ir.kaaveh.sdpcompose.ssp
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun VideoToAudioConverterScreen(
-    videoClicked:(Uri, String)->Unit,
+    navigateToFolderVideos: (String) -> Unit,
+    videoClicked: (Uri, String) -> Unit,
     navigateBack: () -> Unit,
     viewModel: VideoToAudioConverterViewModel = koinViewModel()
 ) {
-    val context= LocalContext.current
+    val context = LocalContext.current
     val state by viewModel.state.collectAsState()
     val pagerState = rememberPagerState(initialPage = 0, pageCount = { 2 })
     val scope = rememberCoroutineScope()
@@ -56,12 +60,16 @@ fun VideoToAudioConverterScreen(
 
 
     Scaffold(topBar = {
-        TopBar(state=state, navigateBack=navigateBack, searchIconClicked = {
+        TopBar(state = state, navigateBack = navigateBack, searchIconClicked = {
             viewModel.SearchIconClicked()
         }, crossIconClicked = {
             viewModel.CrossIconClicked()
         }, onSearchChange = {
-            viewModel.onSearchChange(value = it)
+            if (pagerState.currentPage == 0) {
+                viewModel.onSearchChangeForVideos(value = it)
+            } else {
+                viewModel.onSearchChangeForFolder(value = it)
+            }
         })
     }) { paddingValues ->
         Column(
@@ -126,12 +134,19 @@ fun VideoToAudioConverterScreen(
                 state = pagerState
             ) { page ->
                 when (page) {
-                    0 -> AllVideoFiles(videoClicked = {videoUri,videoTitle->
-                        videoClicked(videoUri,videoTitle)
-                    }, state=state, listOfAllVideos = {
-                        viewModel.saveAllVideos(videos = it,context=context)
+                    0 -> AllVideoFiles(videoClicked = { videoUri, videoTitle ->
+                        videoClicked(videoUri, videoTitle)
+                    }, state = state, listOfAllVideos = {
+                        viewModel.saveAllVideos(videos = it, context = context)
+                    }, sortFilter = {
+                        viewModel.onSortFilterChange(context, it)
                     })
-                    1 -> AllFolder()
+
+                    1 -> AllFolder(navigateToFolderVideos = {
+                        navigateToFolderVideos(it)
+                    }, state = state, listOfAllFolders = {
+                        viewModel.folderListUpdate(it)
+                    })
 
                 }
             }

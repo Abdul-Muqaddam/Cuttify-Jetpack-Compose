@@ -10,6 +10,11 @@ sealed class Routes() {
     )
 
     @Serializable
+    data class VideosInsideTheFolderRoutes(
+        val folderPath:String
+    )
+
+    @Serializable
     data class SuccessScreenRoute(val fileName: String,val filePath: String)
     @Serializable
     object SplashScreenRoute

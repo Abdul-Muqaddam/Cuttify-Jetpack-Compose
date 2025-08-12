@@ -22,6 +22,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import com.example.videotoaudioconverter.R
 import com.example.videotoaudioconverter.presentation.all_folder.VideoToAudioConverterViewModelState
+import com.example.videotoaudioconverter.presentation.videos_inside_the_folder_screen.VideoInsideTheFolderViewModel
+import com.example.videotoaudioconverter.presentation.videos_inside_the_folder_screen.VideosInsideTheFolderViewModelState
 import com.example.videotoaudioconverter.ui.theme.MyColors
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
@@ -29,7 +31,8 @@ import ir.kaaveh.sdpcompose.ssp
 @Composable
 fun TopBar(
     onSearchChange: (String) -> Unit,
-    state: VideoToAudioConverterViewModelState,
+    state2: VideosInsideTheFolderViewModelState =VideosInsideTheFolderViewModelState(),
+    state: VideoToAudioConverterViewModelState=VideoToAudioConverterViewModelState() ,
     navigateBack: () -> Unit,
     searchIconClicked: () -> Unit,
     crossIconClicked: () -> Unit
@@ -56,7 +59,7 @@ fun TopBar(
                 painter = painterResource(R.drawable.ic_back_arrow),
                 contentDescription = null
             )
-            if (state.IdealTopBar) {
+            if (state2.IdealTopBar || state.IdealTopBar) {
                 Text(
                     modifier = Modifier.padding(start = 4.sdp),
                     fontWeight = FontWeight.SemiBold,
@@ -81,7 +84,7 @@ fun TopBar(
                             onSearchChange(it)
                         })
 
-                    if (state.searchText.isEmpty()) {
+                    if (state2.searchText.isEmpty() || state.searchText.isEmpty()) {
                         Text(
                             fontSize = 16.ssp,
                             modifier = Modifier.padding(start = 10.sdp, bottom = 3.sdp),
@@ -98,12 +101,12 @@ fun TopBar(
             modifier = Modifier
                 .size(20.sdp)
                 .clickable {
-                    if (state.IdealTopBar) {
+                    if (state2.IdealTopBar || state.IdealTopBar) {
                         searchIconClicked()
                     } else {
                         crossIconClicked()
                     }
-                }, painter = if (state.IdealTopBar) {
+                }, painter = if (state2.IdealTopBar || state.IdealTopBar) {
                 painterResource(R.drawable.ic_search)
             } else {
                 painterResource(R.drawable.ic_cross)

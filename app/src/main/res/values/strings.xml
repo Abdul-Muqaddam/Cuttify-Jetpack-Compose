@@ -1,3 +1,4 @@
+
 <resources>
     <string name="app_name">Cuttify</string>
     <string name="cuttify">Cuttify</string>
@@ -72,4 +73,16 @@
     <string name="video_to_audio">Video To Audio</string>
     <string name="completed_successfully">Completed Successfully</string>
     <string name="you_may_also_need">You may Also need</string>
+    <string name="sort_by">Sort By</string>
+    <string name="order">Order</string>
+    <string name="new_to_old">New to Old</string>
+    <string name="old_to_new">Old to New</string>
+    <string name="date">Date</string>
+    <string name="name">Name</string>
+    <string name="size">Size</string>
+    <string name="duration">Duration</string>
+    <string name="a_to_z">A to Z</string>
+    <string name="z_to_a">Z to A</string>
+    <string name="small_to_large">Small to Large</string>
+    <string name="large_to_small">Large To Small</string>
 </resources>

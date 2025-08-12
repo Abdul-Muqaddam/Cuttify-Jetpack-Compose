@@ -1,9 +1,7 @@
 package com.example.videotoaudioconverter.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -18,6 +16,7 @@ import com.example.videotoaudioconverter.presentation.splash_screen.SplashScreen
 import com.example.videotoaudioconverter.presentation.video_to_audio_converter.VideoToAudioConverterScreen
 import androidx.core.net.toUri
 import androidx.navigation.toRoute
+import com.example.videotoaudioconverter.presentation.videos_inside_the_folder_screen.VideosInsideTheFolderScreen
 import com.example.videotoaudioconverter.presentation.success_screen.SuccessScreen
 
 @Composable
@@ -47,8 +46,19 @@ fun AppNavHost() {
                 },
                 navigateBack = {
                     appDestination.navigateBack()
+                },
+                navigateToFolderVideos={
+                    appDestination.navigateToAllVideosOfFolderScreen(it)
                 }
             )
+        }
+        composable<Routes.VideosInsideTheFolderRoutes> {
+            val data=it.toRoute<Routes.VideosInsideTheFolderRoutes>()
+            VideosInsideTheFolderScreen(folderPath = data.folderPath, navigateBack={
+                appDestination.navigateBack()
+            }, videoClicked = { videoUri,videoTitle->
+                appDestination.navigateToEachVideoPreviewAndPlayerScreen(videoUri = videoUri.toString(),videoTitle=videoTitle)
+            })
         }
         composable<Routes.EachVideoPreviewAndPlayerRoute> {
             val videoUri = it.toRoute<Routes.EachVideoPreviewAndPlayerRoute>()

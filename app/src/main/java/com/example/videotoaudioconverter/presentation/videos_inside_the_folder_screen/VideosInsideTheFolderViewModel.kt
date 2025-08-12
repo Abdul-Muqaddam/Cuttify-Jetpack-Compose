@@ -1,4 +1,4 @@
-package com.example.videotoaudioconverter.presentation.all_folder
+package com.example.videotoaudioconverter.presentation.videos_inside_the_folder_screen
 
 import android.content.Context
 import android.net.Uri
@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.videotoaudioconverter.presentation.all_folder.VideoFiles
 import com.example.videotoaudioconverter.presentation.all_video_files.components.getFileName
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,17 +17,13 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.Duration
 
-
-data class VideoToAudioConverterViewModelState(
+data class VideosInsideTheFolderViewModelState(
     val sortFilter: String = "new_to_old",
-    val allFolders: List<VideoFolder> = emptyList(),
-    val filteredFolders: List<VideoFolder> = emptyList(),
+    val isShowBottomSheet: Boolean=false,
     val IdealTopBar: Boolean = true,
     val SearchTopBar: Boolean = false,
     val searchText: String = "",
-    val allVideos: List<VideoFiles> = emptyList(),
-    val filteredVideos: List<VideoFiles> = emptyList(),
-    val fileTitle: String = ""
+    val filterVideosList: List<VideoFiles> = emptyList()
 )
 
 data class VideoFiles(
@@ -38,10 +35,9 @@ data class VideoFiles(
     val title: String
 )
 
-
-class VideoToAudioConverterViewModel : ViewModel() {
-    private val _state = MutableStateFlow(VideoToAudioConverterViewModelState())
-    val state: StateFlow<VideoToAudioConverterViewModelState> get() = _state
+class VideoInsideTheFolderViewModel: ViewModel(){
+    private val _state = MutableStateFlow(VideosInsideTheFolderViewModelState())
+    val state: StateFlow<VideosInsideTheFolderViewModelState> get() = _state
 
     fun SearchIconClicked() {
         _state.update {
@@ -51,16 +47,6 @@ class VideoToAudioConverterViewModel : ViewModel() {
             )
         }
     }
-
-    fun folderListUpdate(folders: List<VideoFolder>) {
-        _state.update {
-            it.copy(
-                filteredFolders = folders,
-                allFolders = folders
-            )
-        }
-    }
-
     fun CrossIconClicked() {
         _state.update {
             it.copy(
@@ -69,102 +55,65 @@ class VideoToAudioConverterViewModel : ViewModel() {
             )
         }
     }
-
-    fun onSearchChangeForVideos(value: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-
-            _state.update {
-
-                val filtered = if (value.isBlank()) {
-                    it.allVideos
-                } else {
-                    it.allVideos.filter { uri ->
-                        uri.fileName.contains(value, ignoreCase = true)
-                    }
-                }
-
-                val sorted = when (state.value.sortFilter) {
-                    "new_to_old" -> it.filteredVideos.sortedByDescending { it.dateAdded }
-                    "old_to_new" -> it.filteredVideos.sortedBy { it.dateAdded }
-
-                    "Small_To_Large" -> it.filteredVideos.sortedBy { it.size }
-                    "Large_To_Small" -> it.filteredVideos.sortedByDescending { it.size }
-
-                    "Long_to_Short" -> it.filteredVideos.sortedByDescending { it.duration }
-                    "Short_to_Long" -> it.filteredVideos.sortedBy { it.duration }
-
-                    "A_to_Z" -> it.filteredVideos.sortedBy { it.title.lowercase() }
-                    "Z_to_A" -> it.filteredVideos.sortedByDescending { it.title.lowercase() }
-
-                    else -> {
-                        filtered
-                    }
-                }
-                it.copy(
-                    searchText = value,
-                    filteredVideos = sorted,
-                )
-            }
+    fun isShowBottomSheetChange(state: Boolean){
+        _state.update {
+            it.copy(
+                isShowBottomSheet = state
+            )
         }
     }
 
-    fun onSortFilterChange(context: Context, sortFilter: String) {
-        Toast.makeText(context, sortFilter, Toast.LENGTH_LONG).show()
-
+    fun onSortFilterChange(sortFilter: String) {
         viewModelScope.launch(Dispatchers.IO) {
             _state.update { currentState ->
                 val sorted = when (sortFilter) {
-                    "new_to_old" -> currentState.filteredVideos.sortedByDescending { it.dateAdded }
-                    "old_to_new" -> currentState.filteredVideos.sortedBy { it.dateAdded }
+                    "new_to_old" -> currentState.filterVideosList.sortedByDescending { it.dateAdded }
+                    "old_to_new" -> currentState.filterVideosList.sortedBy { it.dateAdded }
 
-                    "Small_To_Large" -> currentState.filteredVideos.sortedBy { it.size }
-                    "Large_To_Small" -> currentState.filteredVideos.sortedByDescending { it.size }
+                    "Small_To_Large" -> currentState.filterVideosList.sortedBy { it.size }
+                    "Large_To_Small" -> currentState.filterVideosList.sortedByDescending { it.size }
 
-                    "Long_to_Short" -> currentState.filteredVideos.sortedByDescending { it.duration }
-                    "Short_to_Long" -> currentState.filteredVideos.sortedBy { it.duration }
+                    "Long_to_Short" -> currentState.filterVideosList.sortedByDescending { it.duration }
+                    "Short_to_Long" -> currentState.filterVideosList.sortedBy { it.duration }
 
-                    "A_to_Z" -> currentState.filteredVideos.sortedBy { it.title.lowercase() }
-                    "Z_to_A" -> currentState.filteredVideos.sortedByDescending { it.title.lowercase() }
+                    "A_to_Z" -> currentState.filterVideosList.sortedBy { it.title.lowercase() }
+                    "Z_to_A" -> currentState.filterVideosList.sortedByDescending { it.title.lowercase() }
 
-                    else -> currentState.filteredVideos
+                    else -> currentState.filterVideosList
                 }
 
 
                 currentState.copy(
                     sortFilter = sortFilter,
-                    filteredVideos = sorted,
-                    allVideos = sorted
+                    filterVideosList = sorted,
                 )
             }
         }
     }
 
-    fun onSearchChangeForFolder(value: String) {
+    fun onSearchChange(value: String) {
         viewModelScope.launch(Dispatchers.IO) {
 
             _state.update {
 
                 val filtered = if (value.isBlank()) {
-                    it.allFolders
+                    it.filterVideosList
                 } else {
-                    it.allFolders.filter { uri ->
-                        uri.name.contains(value, ignoreCase = true)
-                        //                        getFileName(context, uri).contains(value, ignoreCase = true)
+                    it.filterVideosList.filter { uri ->
+                        uri.fileName.contains(value, ignoreCase = true)
                     }
                 }
 
                 it.copy(
                     searchText = value,
-                    filteredFolders = filtered,
-
-
-                    )
+                    filterVideosList = filtered
+                )
             }
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun saveAllVideos(context: Context, videos: List<Uri>) {
+    fun videoFilesUpdate(context: Context, videos: List<Uri>) {
         viewModelScope.launch(Dispatchers.IO) {
             val videosFile = videos.map { uri ->
 
@@ -211,8 +160,8 @@ class VideoToAudioConverterViewModel : ViewModel() {
 
             _state.update {
                 it.copy(
-                    allVideos = videosFile,
-                    filteredVideos = videosFile
+//                    allVideos = videosFile,
+                    filterVideosList = videosFile
                 )
             }
         }

@@ -1,6 +1,7 @@
 package com.example.videotoaudioconverter.presentation.all_video_files.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,7 +18,7 @@ import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
 
 @Composable
-fun TopBarFilter(totalItems:Int){
+fun TopBarFilter(totalItems:Int, filterClicked : ()-> Unit){
     Row(
         modifier = Modifier
             .padding(vertical = 10.sdp, horizontal = 16.sdp)
@@ -27,7 +28,9 @@ fun TopBarFilter(totalItems:Int){
     ) {
         Text(text = "$totalItems items", color = MyColors.Green058, fontSize = 18.ssp)
         Image(
-            modifier = Modifier.size(22.sdp),
+            modifier = Modifier.size(22.sdp).clickable(){
+                filterClicked()
+            },
             painter = painterResource(R.drawable.ic_filter),
             contentDescription = null
         )

@@ -4,7 +4,9 @@ import androidx.navigation.NavController
 
 class AppDestination(private val navController: NavController) {
 
-
+    fun navigateToAllVideosOfFolderScreen(folderPath:String){
+        navController.navigate(Routes.VideosInsideTheFolderRoutes(folderPath))
+    }
     fun navigateToEachVideoPreviewAndPlayerScreen(videoUri: String,videoTitle: String){
         navController.navigate(Routes.EachVideoPreviewAndPlayerRoute(videoUri,videoTitle))
     }

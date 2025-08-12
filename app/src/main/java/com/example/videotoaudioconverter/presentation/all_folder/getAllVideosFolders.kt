@@ -4,8 +4,14 @@ import android.content.Context
 import android.provider.MediaStore
 import java.io.File
 
-fun getAllVideoFolders(context: Context): List<String> {
-    val folderSet = mutableSetOf<String>()
+
+data class VideoFolder(
+    val name: String,
+    val path: String
+)
+
+fun getAllVideoFolders(context: Context): List<VideoFolder> {
+    val folderSet = mutableSetOf<VideoFolder>()
     val projection = arrayOf(
         MediaStore.Video.Media.DATA
     )
@@ -24,9 +30,11 @@ fun getAllVideoFolders(context: Context): List<String> {
 
         while (it.moveToNext()) {
             val videoPath = it.getString(dataIndex)
-            val folderPath = File(videoPath).parentFile?.name
-            if (folderPath != null) {
-                folderSet.add(folderPath)
+            val parentFile = File(videoPath).parentFile
+            if (parentFile != null) {
+                val folderName = parentFile.name
+                val folderPath = parentFile.absolutePath
+                folderSet.add(VideoFolder(folderName, folderPath))
             }
         }
     }
