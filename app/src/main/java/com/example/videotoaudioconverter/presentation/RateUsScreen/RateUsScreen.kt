@@ -34,6 +34,8 @@ import ir.kaaveh.sdpcompose.ssp
 fun RateUsScreen(
     navigateToSettingScreen: () -> Unit,
     navigateBackToSettingScreen: () -> Unit,
+    navigateToPlayStore: () -> Unit,
+    navigateToFeedbackScreen: () -> Unit,
     viewModel: RatingViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
 ) {
     val state = viewModel.state.collectAsState().value
@@ -79,14 +81,6 @@ fun RateUsScreen(
 
         Spacer(modifier = Modifier.weight(1f))
 
-        Text(
-            text = stringResource(R.string.rate_us),
-            color = MyColors.Green058,
-            fontWeight = FontWeight.Bold,
-            fontSize = 22.ssp,
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-        )
         Text(
             text = stringResource(R.string.tell_us_about_your_experience_with_the_video_downloader_app),
             color = MyColors.Green058,
@@ -137,9 +131,16 @@ fun RateUsScreen(
         }
 
 
-        if (selectedStars > 0) {
+
             Button(
-                onClick = {},
+                onClick = {
+                    if (selectedStars == 5){
+                        navigateToPlayStore()
+                    }
+                    else{
+                        navigateToFeedbackScreen()
+                    }
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 30.sdp)
@@ -152,7 +153,7 @@ fun RateUsScreen(
                     fontSize = 16.ssp
                 )
             }
-        }
+
 
         Text(
             text = stringResource(R.string.maybe_later),
@@ -164,6 +165,6 @@ fun RateUsScreen(
                 .align(Alignment.CenterHorizontally)
                 .padding(top = 10.sdp)
         )
-        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.weight(3f))
     }
 }

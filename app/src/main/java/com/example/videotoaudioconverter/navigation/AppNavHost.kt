@@ -1,5 +1,7 @@
 package com.example.videotoaudioconverter.navigation
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,6 +26,8 @@ import com.example.videotoaudioconverter.presentation.success_screen.SuccessScre
 fun AppNavHost() {
     val navController = rememberNavController()
     val appDestination = remember (navController){ AppDestination(navController) }
+    val context = LocalContext.current
+
     NavHost(
         navController = navController,
         startDestination = Routes.SplashScreenRoute
@@ -76,11 +80,13 @@ fun AppNavHost() {
                 appDestination.navigateToFeedbackScreen()
             }, navigateToRateUsScreen = {
                 appDestination.navigateToRateUsScreen()
+            },navigateBackToMainScreen =  {
+                appDestination.navigateToMainScreen()
             })
         }
 
         composable<Routes.LanguageScreenRoute> {
-            LanguageScreen(navigateBackToSettingScreen = {
+            LanguageScreen(navigateBack = {
                 appDestination.navigateToSettingsScreen()
             })
         }
@@ -100,7 +106,16 @@ fun AppNavHost() {
                 appDestination.navigateToSettingsScreen()
             }, navigateToSettingScreen = {
                 appDestination.navigateToSettingsScreen()
-            })
+            }, navigateToFeedbackScreen = {
+                appDestination.navigateToFeedbackScreen()
+            }, navigateToPlayStore = {
+                val intent = Intent(Intent.ACTION_VIEW).apply {
+                    data = Uri.parse("https://play.google.com/store/apps/details?id=com.example.yourapp")
+                    setPackage("com.android.vending")
+                }
+                context.startActivity(intent)
+            }
+            )
         }
 
     }

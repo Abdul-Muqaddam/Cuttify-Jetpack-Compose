@@ -154,19 +154,22 @@ fun SuccessScreen(fileName: String, filePath: String) {
                     imgWidth = 65,
                     imgHeight = 30,
                     img = R.drawable.ic_audio_merge,
-                    text = stringResource(R.string.audio_merge)
+                    text = stringResource(R.string.audio_merge),
+                    onClick = {}
                 )
                 FeatureCard(
                     imgWidth = 65,
                     imgHeight = 30,
                     img = R.drawable.ic_ringtoon,
-                    text = stringResource(R.string.set_ringtone)
+                    text = stringResource(R.string.set_ringtone),
+                    onClick = {}
                 )
                 FeatureCard(
                     imgWidth = 30,
                     imgHeight = 30,
                     img = R.drawable.ic_audio__player,
-                    text = stringResource(R.string.audio_player)
+                    text = stringResource(R.string.audio_player),
+                    onClick = {}
                 )
 
             }
@@ -175,7 +178,8 @@ fun SuccessScreen(fileName: String, filePath: String) {
                 imgWidth = 50,
                 imgHeight = 30,
                 img = R.drawable.ic_audio_cutter,
-                text = stringResource(R.string.audio_cutter)
+                text = stringResource(R.string.audio_cutter),
+                onClick = {}
             )
         }
     }

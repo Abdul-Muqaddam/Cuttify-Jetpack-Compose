@@ -118,12 +118,21 @@ fun FeedbackScreen(navigateBackToSettingsScreen:()->Unit) {
         OutlinedTextField(
             value = descriptionText,
             onValueChange = { descriptionText = it },
-            placeholder = { Text(text = "Write suggestions here ....") },
+            placeholder = { Text(text = stringResource(R.string.write_suggestions_here)) },
+            shape = RoundedCornerShape(10.sdp),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = MyColors.greyD56_80,
+                unfocusedBorderColor = MyColors.greyD56_80,
+                cursorColor = MyColors.greyD56_80,
+                focusedTextColor = Color.Black,
+                unfocusedTextColor = Color.Black,
+                focusedPlaceholderColor = MyColors.greyD56_80,
+                unfocusedPlaceholderColor = MyColors.greyD56_80
+            ),
             modifier = Modifier
                 .fillMaxWidth()
                 .height(220.sdp),
             maxLines = 10,
-            shape = RoundedCornerShape(10.sdp),
             )
         Button (
             onClick = {

@@ -1,5 +1,6 @@
 package com.example.videotoaudioconverter
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -10,6 +11,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.videotoaudioconverter.data.AppPreference
 import com.example.videotoaudioconverter.navigation.AppNavHost
 import com.example.videotoaudioconverter.presentation.setting_screen.SettingScreen
 import com.example.videotoaudioconverter.presentation.home_screen.HomeScreen
@@ -19,6 +21,10 @@ import com.example.videotoaudioconverter.ui.theme.VideoToAudioConverterTheme
 import kotlinx.serialization.Serializable
 
 class MainActivity : ComponentActivity() {
+    override fun attachBaseContext(newBase: Context?) {
+        val languageCode = AppPreference.getLanguageCode()
+        super.attachBaseContext(newBase)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()

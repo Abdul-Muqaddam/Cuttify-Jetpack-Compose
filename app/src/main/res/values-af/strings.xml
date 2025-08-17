@@ -1,19 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Cuttify</string>
-    <string name="cuttify">Cuttify</string>
-    <string name="video_to_audio_converter">Video To Audio Converter</string>
-    <string name="audio">Audio</string>
-    <string name="audio_player">Audio Player</string>
-    <string name="audio_cutter">Audio Cutter</string>
-    <string name="audio_merge">Audio Merge</string>
+
+    <string name="app_name">Cutify</string>
+    <string name="cuttify">Cutify</string>
+    <string name="video_to_audio_converter">Video na oudio-omskakelaar</string>
+    <string name="audio">Oudio</string>
+    <string name="audio_player">Oudiospeler</string>
+    <string name="audio_cutter">Oudio snyer</string>
+    <string name="audio_merge">Oudio-samevoeging</string>
     <string name="video">Video</string>
-    <string name="video_player">Video Player</string>
-    <string name="set_ringtone">Set Ringtone</string>
-    <string name="video_cutter">Video Cutter</string>
-    <string name="select_video">Select Video</string>
-    <string name="upgrade_premium">Upgrade Premium</string>
-    <string name="home">Home</string>
-    <string name="shorts">Shorts</string>
+    <string name="video_player">Videospeler</string>
+    <string name="set_ringtone">Stel luitoon</string>
+    <string name="video_cutter">Video snyer</string>
+    <string name="select_video">Kies Video</string>
+    <string name="upgrade_premium">Gradeer Premium op</string>
+    <string name="home">Tuis</string>
+    <string name="shorts">Kortbroek</string>
     <string name="output">Output</string>
     <string name="go_to_settings">GO TO SETTINGS</string>
     <string name="cancel">CANCEL</string>
@@ -74,4 +76,5 @@
     <string name="you_may_also_need">You may Also need</string>
     <string name="settings">Settings</string>
     <string name="write_suggestions_here">Write suggestions here ....</string>
+
 </resources>
