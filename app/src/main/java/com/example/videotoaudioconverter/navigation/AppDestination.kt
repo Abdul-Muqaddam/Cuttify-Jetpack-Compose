@@ -31,6 +31,9 @@ class AppDestination(private val navController: NavController) {
     fun navigateToRateUsScreen(){
         navController.navigate(Routes.RateUsScreenRoute)
     }
+    fun navigateToPremiumScreen(){
+        navController.navigate(Routes.PremiumScreenRoute)
+    }
 
     fun navigateToSuccessScreen(fileName:String,filePath:String){
         navController.navigate(Routes.SuccessScreenRoute(fileName,filePath))

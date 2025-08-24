@@ -20,6 +20,7 @@ import com.example.videotoaudioconverter.presentation.splash_screen.SplashScreen
 import com.example.videotoaudioconverter.presentation.video_to_audio_converter.VideoToAudioConverterScreen
 import androidx.core.net.toUri
 import androidx.navigation.toRoute
+import com.example.videotoaudioconverter.presentation.Premium_Screen.Premium_Screen
 import com.example.videotoaudioconverter.presentation.success_screen.SuccessScreen
 
 @Composable
@@ -41,6 +42,8 @@ fun AppNavHost() {
                 appDestination.navigateToVideoToAudioConverterScreen()
             }, navigateToSetRingtoneScreen = {
                 appDestination.navigateToSetRingtoneScreen()
+            }, navigateToPremiumScreen = {
+                appDestination.navigateToPremiumScreen()
             }
             )
         }
@@ -82,6 +85,8 @@ fun AppNavHost() {
                 appDestination.navigateToRateUsScreen()
             },navigateBackToMainScreen =  {
                 appDestination.navigateToMainScreen()
+            }, navigateToPremiumScreen = {
+                appDestination.navigateToPremiumScreen()
             })
         }
 
@@ -100,6 +105,9 @@ fun AppNavHost() {
             SetRingtoneScreen(navigateBackToMainScreen =  {
                 appDestination.navigateToMainScreen()
             })
+        }
+        composable<Routes.PremiumScreenRoute> {
+            Premium_Screen()
         }
         composable<Routes.RateUsScreenRoute> {
             RateUsScreen(navigateBackToSettingScreen = {

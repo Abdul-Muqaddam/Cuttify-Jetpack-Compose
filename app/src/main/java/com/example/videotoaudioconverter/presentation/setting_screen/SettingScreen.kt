@@ -43,7 +43,8 @@ fun SettingScreen(
     navigateToLanguageScreen: () -> Unit,
     navigateToFeedbackScreen: () -> Unit,
     navigateToRateUsScreen: () -> Unit,
-    navigateBackToMainScreen: () -> Unit
+    navigateBackToMainScreen: () -> Unit,
+    navigateToPremiumScreen: ()-> Unit
 ) {
     val scrollState = rememberScrollState()
     val context = LocalContext.current
@@ -80,7 +81,8 @@ fun SettingScreen(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 30.sdp),
+                .padding(top = 30.sdp)
+                .clickable { navigateToPremiumScreen() },
             contentAlignment = Alignment.Center
         ) {
             Image(

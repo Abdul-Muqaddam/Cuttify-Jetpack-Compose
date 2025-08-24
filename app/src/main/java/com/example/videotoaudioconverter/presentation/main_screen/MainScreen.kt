@@ -38,7 +38,8 @@ import kotlinx.coroutines.launch
 fun MainScreen(
     navigateToVideToAudioConverter:()->Unit,
     navigateToSettingScreen: () -> Unit,
-    navigateToSetRingtoneScreen:()->Unit
+    navigateToSetRingtoneScreen:()->Unit,
+    navigateToPremiumScreen:()->Unit
 ) {
     val pagerState = rememberPagerState(0, pageCount = { 3 })
     val scope = rememberCoroutineScope()
@@ -94,6 +95,8 @@ fun MainScreen(
                     navigateToSettingScreen()
                 }, navigateToSetRingtoneScreen = {
                     navigateToSetRingtoneScreen()
+                }, navigateToPremiumScreen = {
+                    navigateToPremiumScreen()
                 }
                     )
 

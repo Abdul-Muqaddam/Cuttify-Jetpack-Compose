@@ -33,4 +33,6 @@ sealed class Routes() {
     object SetRingtoneScreenRoute
     @Serializable
     object RateUsScreenRoute
+    @Serializable
+    object PremiumScreenRoute
 }
