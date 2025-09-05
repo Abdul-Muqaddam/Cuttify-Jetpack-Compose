@@ -36,7 +36,8 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun MainScreen(
-    navigateToVideToAudioConverter:()->Unit,
+    navigateToAudioPlayerScreen:()->Unit,
+    navigateToVideToAudioConverter:(String)->Unit,
     navigateToSettingScreen: () -> Unit,
     navigateToSetRingtoneScreen:()->Unit
 ) {
@@ -89,11 +90,13 @@ fun MainScreen(
         ) { page ->
             when (page) {
                 0 -> HomeScreen(navigateToVideToAudioConverter={
-                    navigateToVideToAudioConverter()
+                    navigateToVideToAudioConverter(it)
                 }, navigateToSettingScreen = {
                     navigateToSettingScreen()
                 }, navigateToSetRingtoneScreen = {
                     navigateToSetRingtoneScreen()
+                },navigateToAudioPlayerScreen={
+                    navigateToAudioPlayerScreen()
                 }
                     )
 

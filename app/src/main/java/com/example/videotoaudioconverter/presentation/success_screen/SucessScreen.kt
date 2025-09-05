@@ -42,6 +42,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.core.content.FileProvider
+import com.example.lifelinepro.presentation.comman.formatDurationVideo
 import com.example.videotoaudioconverter.R
 import com.example.videotoaudioconverter.presentation.home_screen.component.FeatureCard
 import com.example.videotoaudioconverter.presentation.home_screen.component.HorizontalSpacer
@@ -91,7 +92,7 @@ fun SuccessScreen(
             mediaPlayer.reset()
             mediaPlayer.setDataSource(filePath)
             mediaPlayer.prepare()
-            viewModel.formatedDurationUpdate(formatDuration(mediaPlayer.duration))
+            viewModel.formatedDurationUpdate(formatDurationVideo(mediaPlayer.duration))
             mediaPlayer.reset()
         } catch (e: Exception) {
             Log.e("SuccessScreen", "Error loading audio duration", e)
@@ -114,7 +115,7 @@ fun SuccessScreen(
             while (state.isPlaying && mediaPlayer.isPlaying) {
                 val ratio = mediaPlayer.currentPosition.toFloat() / mediaPlayer.duration.toFloat()
                 progress.snapTo(ratio)
-                viewModel.formatedCurrentPositionUpdate(formatDuration(mediaPlayer.currentPosition))
+                viewModel.formatedCurrentPositionUpdate(formatDurationVideo(mediaPlayer.currentPosition))
                 kotlinx.coroutines.delay(100L)
             }
         } else {

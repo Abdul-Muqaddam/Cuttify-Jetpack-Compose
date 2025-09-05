@@ -29,7 +29,10 @@ import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
 
 @Composable
-fun SetRingtoneScreen(navigateBackToMainScreen:()->Unit) {
+fun SetRingtoneScreen(
+    navigateBackToMainScreen: () -> Unit,
+    navigateToAudioSelection: (String) -> Unit
+) {
     Column(modifier = Modifier.padding(horizontal = 15.sdp)) {
         Row(
             modifier = Modifier
@@ -56,19 +59,22 @@ fun SetRingtoneScreen(navigateBackToMainScreen:()->Unit) {
         SetRingtoneScreenCard(
             mainImg = R.drawable.ic_music_fill,
             mainText = R.string.ringtone,
-            rightImg = R.drawable.ic_front_arrow
+            rightImg = R.drawable.ic_front_arrow,
+            onClick = { navigateToAudioSelection("ringtone") }
         )
 
         SetRingtoneScreenCard(
             mainImg = R.drawable.ic_bell_fill,
             mainText = R.string.notification,
-            rightImg = R.drawable.ic_front_arrow
+            rightImg = R.drawable.ic_front_arrow,
+            onClick = { navigateToAudioSelection("notification") }
         )
 
         SetRingtoneScreenCard(
             mainImg = R.drawable.ic_alarm_fill,
             mainText = R.string.alarm,
-            rightImg = R.drawable.ic_front_arrow
+            rightImg = R.drawable.ic_front_arrow,
+            onClick = { navigateToAudioSelection("alarm") }
         )
     }
 }

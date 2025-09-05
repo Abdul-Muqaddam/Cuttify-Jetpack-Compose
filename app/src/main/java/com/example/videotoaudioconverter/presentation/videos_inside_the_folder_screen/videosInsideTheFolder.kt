@@ -2,6 +2,7 @@ package com.example.videotoaudioconverter.presentation.videos_inside_the_folder_
 
 import android.net.Uri
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -16,6 +17,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import com.example.videotoaudioconverter.R
 import com.example.videotoaudioconverter.presentation.all_video_files.components.EachVideoComponent
 import com.example.videotoaudioconverter.presentation.all_video_files.components.TopBarFilter
 import com.example.videotoaudioconverter.presentation.comman_components.BottomSheet
@@ -26,6 +29,8 @@ import org.koin.androidx.compose.koinViewModel
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun VideosInsideTheFolderScreen(
+    videoClickedForPlayer:(Uri)->Unit,
+    fromWhichScreen: String,
     videoClicked: (Uri, String) -> Unit,
     viewModel: VideoInsideTheFolderViewModel = koinViewModel(),
     folderPath: String,
@@ -33,7 +38,7 @@ fun VideosInsideTheFolderScreen(
 ) {
     val context = LocalContext.current
     val state by viewModel.state.collectAsState()
-
+    
     LaunchedEffect(Unit) {
         viewModel.videoFilesUpdate(
             context = context,
@@ -51,7 +56,8 @@ fun VideosInsideTheFolderScreen(
             },
             onSearchChange = {
                 viewModel.onSearchChange(it)
-            })
+            }, title = stringResource(R.string.select_video)
+        )
     }) { paddingValues ->
         Column(modifier = Modifier.padding(paddingValues)) {
             TopBarFilter(state.filterVideosList.size, filterClicked = {
@@ -72,7 +78,11 @@ fun VideosInsideTheFolderScreen(
                 items(state.filterVideosList) { item ->
                     EachVideoComponent(
                         videoClicked = { videoUri, videoTitle ->
-                            videoClicked(videoUri, videoTitle)
+                            if (fromWhichScreen == "from_audio_to_video_converter") {
+                                videoClicked(videoUri, videoTitle)
+                            } else {
+                                videoClickedForPlayer(videoUri)
+                            }
                         },
                         video = item.uri,
                         fileName = item.fileName

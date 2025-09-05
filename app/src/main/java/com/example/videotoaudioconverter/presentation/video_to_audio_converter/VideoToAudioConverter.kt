@@ -2,6 +2,7 @@ package com.example.videotoaudioconverter.presentation.video_to_audio_converter
 
 import android.net.Uri
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -47,6 +48,8 @@ import org.koin.androidx.compose.koinViewModel
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun VideoToAudioConverterScreen(
+    videoClickedForPlayer:(Uri)->Unit,
+    fromWhichScreen: String,
     navigateToFolderVideos: (String) -> Unit,
     videoClicked: (Uri, String) -> Unit,
     navigateBack: () -> Unit,
@@ -56,8 +59,6 @@ fun VideoToAudioConverterScreen(
     val state by viewModel.state.collectAsState()
     val pagerState = rememberPagerState(initialPage = 0, pageCount = { 2 })
     val scope = rememberCoroutineScope()
-
-
 
     Scaffold(topBar = {
         TopBar(state = state, navigateBack = navigateBack, searchIconClicked = {
@@ -70,7 +71,7 @@ fun VideoToAudioConverterScreen(
             } else {
                 viewModel.onSearchChangeForFolder(value = it)
             }
-        })
+        }, title = stringResource(R.string.select_video))
     }) { paddingValues ->
         Column(
             modifier = Modifier
@@ -135,7 +136,14 @@ fun VideoToAudioConverterScreen(
             ) { page ->
                 when (page) {
                     0 -> AllVideoFiles(videoClicked = { videoUri, videoTitle ->
+
+                        if(fromWhichScreen=="from_audio_to_video_converter"){
+
                         videoClicked(videoUri, videoTitle)
+                        }else{
+                            videoClickedForPlayer(videoUri)
+
+                        }
                     }, state = state, listOfAllVideos = {
                         viewModel.saveAllVideos(videos = it, context = context)
                     }, sortFilter = {
@@ -153,4 +161,3 @@ fun VideoToAudioConverterScreen(
         }
     }
 }
-

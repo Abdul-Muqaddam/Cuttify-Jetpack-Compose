@@ -1,6 +1,7 @@
 package com.example.videotoaudioconverter.core.di
 
 import com.example.videotoaudioconverter.presentation.all_folder.VideoToAudioConverterViewModel
+import com.example.videotoaudioconverter.presentation.audio_player_screen.AudioPlayerViewModel
 import com.example.videotoaudioconverter.presentation.comman_components.BottomSheetViewModel
 import com.example.videotoaudioconverter.presentation.each_video_preview_and_player_screen.EachVideoPreviewAndPlayerScreenViewModel
 import com.example.videotoaudioconverter.presentation.success_screen.SuccessScreenViewModel
@@ -15,4 +16,5 @@ val appModule = module {
     viewModelOf(::SuccessScreenViewModel)
     viewModelOf(::VideoInsideTheFolderViewModel)
     viewModelOf(::BottomSheetViewModel)
+    viewModelOf(::AudioPlayerViewModel)
 }

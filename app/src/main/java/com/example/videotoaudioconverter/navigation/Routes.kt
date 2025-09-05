@@ -10,8 +10,16 @@ sealed class Routes() {
     )
 
     @Serializable
+    data object AudioPlayerRoute
+
+    @Serializable
+    data class VideoPlayerRoute(
+        val videoUri:String,
+    )
+    @Serializable
     data class VideosInsideTheFolderRoutes(
-        val folderPath:String
+        val folderPath:String,
+        val fromWhichScreen:String
     )
 
     @Serializable
@@ -20,13 +28,13 @@ sealed class Routes() {
     object SplashScreenRoute
 
     @Serializable
-    object SettingScreenRoute
+    data object SettingScreenRoute
 
     @Serializable
     object MainScreenRoute
 
     @Serializable
-    object VideoToAudioConverterRoute
+    data class VideoToAudioConverterRoute(val fromWhichScreen: String)
 
     @Serializable
     object LanguageScreenRoute
@@ -35,7 +43,11 @@ sealed class Routes() {
     object FeedbackScreenRoute
 
     @Serializable
-    object SetRingtoneScreenRoute
+    data object SetRingtoneScreenRoute
+    
+    @Serializable
+    data class AudioSelectionRoute(val ringtoneType: String)
+    
     @Serializable
     object RateUsScreenRoute
 }

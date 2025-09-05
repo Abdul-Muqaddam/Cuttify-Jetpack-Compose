@@ -42,8 +42,10 @@ import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
 
 @Composable
-fun HomeScreen(navigateToSettingScreen: () -> Unit,
-               navigateToVideToAudioConverter: () -> Unit,
+fun HomeScreen(
+    navigateToAudioPlayerScreen:()->Unit,
+    navigateToSettingScreen: () -> Unit,
+               navigateToVideToAudioConverter: (String) -> Unit,
                navigateToSetRingtoneScreen:()->Unit
 ) {
     val context = LocalContext.current
@@ -54,7 +56,7 @@ fun HomeScreen(navigateToSettingScreen: () -> Unit,
     if (isPermissionForVideoAndImage) {
         VideoAndPhotoPermission(
             onGranted = {
-                navigateToVideToAudioConverter()
+                navigateToVideToAudioConverter("from_audio_to_video_converter")
             },
             onDeniedTemporarily = {
                 isPermissionForVideoAndImage = false
@@ -154,7 +156,7 @@ fun HomeScreen(navigateToSettingScreen: () -> Unit,
                 imgHeight = 30,
                 img = R.drawable.ic_audio__player,
                 text = stringResource(R.string.audio_player),
-                onClick = {}
+                onClick = { navigateToAudioPlayerScreen()}
             )
             FeatureCard(
                 imgWidth = 50,
@@ -187,7 +189,7 @@ fun HomeScreen(navigateToSettingScreen: () -> Unit,
                 imgHeight = 30,
                 img = R.drawable.ic_video_player,
                 text = stringResource(R.string.video_player),
-                onClick = {}
+                onClick = {navigateToVideToAudioConverter("from_video_player")}
             )
             FeatureCard(
                 imgWidth = 65,

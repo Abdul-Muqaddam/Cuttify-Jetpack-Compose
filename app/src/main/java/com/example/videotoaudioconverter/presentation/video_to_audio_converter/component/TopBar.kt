@@ -30,6 +30,7 @@ import ir.kaaveh.sdpcompose.ssp
 
 @Composable
 fun TopBar(
+    title:String,
     onSearchChange: (String) -> Unit,
     state2: VideosInsideTheFolderViewModelState =VideosInsideTheFolderViewModelState(),
     state: VideoToAudioConverterViewModelState=VideoToAudioConverterViewModelState() ,
@@ -64,7 +65,7 @@ fun TopBar(
                     modifier = Modifier.padding(start = 4.sdp),
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 20.ssp,
-                    text = stringResource(R.string.select_video),
+                    text = title,
                     color = MyColors.MainColor
                 )
             } else {

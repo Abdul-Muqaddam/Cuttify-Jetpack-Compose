@@ -16,8 +16,10 @@ import com.example.videotoaudioconverter.presentation.splash_screen.SplashScreen
 import com.example.videotoaudioconverter.presentation.video_to_audio_converter.VideoToAudioConverterScreen
 import androidx.core.net.toUri
 import androidx.navigation.toRoute
+import com.example.videotoaudioconverter.presentation.audio_player_screen.AudioPlayerScreen
 import com.example.videotoaudioconverter.presentation.videos_inside_the_folder_screen.VideosInsideTheFolderScreen
 import com.example.videotoaudioconverter.presentation.success_screen.SuccessScreen
+import com.example.videotoaudioconverter.presentation.video_player_screen.VideoPlayerScreen
 
 @Composable
 fun AppNavHost() {
@@ -29,18 +31,31 @@ fun AppNavHost() {
 
 
     ) {
-        composable<Routes.MainScreenRoute> {
+        composable<Routes.MainScreenRoute> { it ->
             MainScreen(navigateToSettingScreen = {
+//                val data=it.toRoute<Routes.MainScreenRoute>()
                 appDestination.navigateToSettingsScreen()
             },navigateToVideToAudioConverter={
-                appDestination.navigateToVideoToAudioConverterScreen()
+                appDestination.navigateToVideoToAudioConverterScreen(it)
             }, navigateToSetRingtoneScreen = {
                 appDestination.navigateToSetRingtoneScreen()
-            }
+            },
+                navigateToAudioPlayerScreen={
+                    appDestination.navigateToAudioPlayerScreen()
+                }
+            )
+        }
+        composable<Routes.AudioPlayerRoute> {
+            AudioPlayerScreen(
+                navigateBack = {
+                    appDestination.navigateBack()
+                }
             )
         }
         composable<Routes.VideoToAudioConverterRoute> {
+            val data=it.toRoute<Routes.VideoToAudioConverterRoute>()
             VideoToAudioConverterScreen(
+                fromWhichScreen = data.fromWhichScreen,
                 videoClicked={videoUri,videoTitle->
                   appDestination.navigateToEachVideoPreviewAndPlayerScreen(videoUri = videoUri.toString(),videoTitle=videoTitle)
                 },
@@ -48,9 +63,16 @@ fun AppNavHost() {
                     appDestination.navigateBack()
                 },
                 navigateToFolderVideos={
-                    appDestination.navigateToAllVideosOfFolderScreen(it)
+                    appDestination.navigateToAllVideosOfFolderScreen(folderPath = it, fromWhichScreen =data.fromWhichScreen )
+                },
+                videoClickedForPlayer = {videoUri->
+                    appDestination.navigateToVideoPlayerScreen(videoUri.toString())
                 }
             )
+        }
+        composable<Routes.VideoPlayerRoute> {
+            val data=it.toRoute<Routes.VideoPlayerRoute>()
+            VideoPlayerScreen(videoUri = data.videoUri.toUri())
         }
         composable<Routes.VideosInsideTheFolderRoutes> {
             val data=it.toRoute<Routes.VideosInsideTheFolderRoutes>()
@@ -58,7 +80,9 @@ fun AppNavHost() {
                 appDestination.navigateBack()
             }, videoClicked = { videoUri,videoTitle->
                 appDestination.navigateToEachVideoPreviewAndPlayerScreen(videoUri = videoUri.toString(),videoTitle=videoTitle)
-            })
+            }, videoClickedForPlayer = {
+                appDestination.navigateToVideoPlayerScreen(it.toString())
+            }, fromWhichScreen = data.fromWhichScreen)
         }
         composable<Routes.EachVideoPreviewAndPlayerRoute> {
             val videoUri = it.toRoute<Routes.EachVideoPreviewAndPlayerRoute>()
@@ -101,10 +125,27 @@ fun AppNavHost() {
             })
         }
         composable<Routes.SetRingtoneScreenRoute> {
-            SetRingtoneScreen(navigateBackToMainScreen =  {
-                appDestination.navigateToMainScreen()
-            })
+            SetRingtoneScreen(
+                navigateBackToMainScreen = {
+                    appDestination.navigateToMainScreen()
+                },
+                navigateToAudioSelection = { ringtoneType ->
+                    appDestination.navigateToAudioSelection(ringtoneType)
+                }
+            )
         }
+        
+        composable<Routes.AudioSelectionRoute> {
+            val data = it.toRoute<Routes.AudioSelectionRoute>()
+            AudioPlayerScreen(
+                navigateBack = {
+                    appDestination.navigateBack()
+                },
+                isSetRingtone = true,
+                ringtoneType = data.ringtoneType
+            )
+        }
+        
         composable<Routes.RateUsScreenRoute> {
             RateUsScreen(navigateBackToSettingScreen = {
                 appDestination.navigateToSettingsScreen()

@@ -1,11 +1,19 @@
 package com.example.videotoaudioconverter.navigation
 
+import android.net.Uri
 import androidx.navigation.NavController
 
 class AppDestination(private val navController: NavController) {
 
-    fun navigateToAllVideosOfFolderScreen(folderPath:String){
-        navController.navigate(Routes.VideosInsideTheFolderRoutes(folderPath))
+
+    fun navigateToVideoPlayerScreen(videoUri: String){
+        navController.navigate(Routes.VideoPlayerRoute(videoUri))
+    }
+    fun navigateToAudioPlayerScreen(){
+        navController.navigate(Routes.AudioPlayerRoute)
+    }
+    fun navigateToAllVideosOfFolderScreen(folderPath:String,fromWhichScreen: String){
+        navController.navigate(Routes.VideosInsideTheFolderRoutes(folderPath= folderPath, fromWhichScreen = fromWhichScreen))
     }
     fun navigateToEachVideoPreviewAndPlayerScreen(videoUri: String,videoTitle: String){
         navController.navigate(Routes.EachVideoPreviewAndPlayerRoute(videoUri,videoTitle))
@@ -18,8 +26,8 @@ class AppDestination(private val navController: NavController) {
             popUpTo(Routes.SplashScreenRoute) { inclusive = true }
         }
     }
-    fun navigateToVideoToAudioConverterScreen(){
-        navController.navigate(Routes.VideoToAudioConverterRoute)
+    fun navigateToVideoToAudioConverterScreen(fromWhichScreen:String){
+        navController.navigate(Routes.VideoToAudioConverterRoute(fromWhichScreen))
     }
     fun navigateToLanguageScreen(){
         navController.navigate(Routes.LanguageScreenRoute)
@@ -30,6 +38,11 @@ class AppDestination(private val navController: NavController) {
     fun navigateToSetRingtoneScreen(){
         navController.navigate(Routes.SetRingtoneScreenRoute)
     }
+    
+    fun navigateToAudioSelection(ringtoneType: String) {
+        navController.navigate(Routes.AudioSelectionRoute(ringtoneType))
+    }
+    
     fun navigateToRateUsScreen(){
         navController.navigate(Routes.RateUsScreenRoute)
     }
