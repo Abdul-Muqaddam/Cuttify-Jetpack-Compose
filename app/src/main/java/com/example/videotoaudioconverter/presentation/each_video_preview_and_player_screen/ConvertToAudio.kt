@@ -1,6 +1,7 @@
 package com.example.videotoaudioconverter.presentation.each_video_preview_and_player_screen
 
 import android.content.Context
+import android.content.Intent
 import android.media.MediaCodec
 import android.media.MediaExtractor
 import android.media.MediaFormat
@@ -9,6 +10,7 @@ import android.net.Uri
 import android.os.Environment
 import android.util.Log
 import android.widget.Toast
+import com.example.videotoaudioconverter.service.VideoToAudioService
 import java.io.File
 import java.nio.ByteBuffer
 
@@ -17,6 +19,7 @@ fun extractAudioFromVideo(
     context: Context,
     videoUri: Uri,
     outputFile: File,
+    onProgress: (Int) -> Unit,
     onComplete: (Boolean, Exception?) -> Unit
 ) {
     Thread {
@@ -44,6 +47,8 @@ fun extractAudioFromVideo(
 
             extractor.selectTrack(audioTrackIndex)
 
+            val durationUs = format.getLong(MediaFormat.KEY_DURATION)
+
             val muxer =
                 MediaMuxer(outputFile.absolutePath, MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4)
             val muxerAudioTrackIndex = muxer.addTrack(format)
@@ -64,6 +69,11 @@ fun extractAudioFromVideo(
 
                 muxer.writeSampleData(muxerAudioTrackIndex, buffer, bufferInfo)
                 extractor.advance()
+
+                val progress = ((bufferInfo.presentationTimeUs.toDouble() / durationUs) * 100).toInt()
+                    .coerceIn(0, 100)
+
+                onProgress(progress)
             }
 
             muxer.stop()
@@ -82,9 +92,11 @@ fun extractAudioAndSave(
     context: Context,
     videoUri: Uri,
     fileName: String,
+    onProgress: (Int) -> Unit,
     onComplete: (File) -> Unit,
     onFailed: () -> Unit
 ) {
+
     val audioDir = File(
         Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC),
         "Cuttify/VideoToAudio"
@@ -92,12 +104,37 @@ fun extractAudioAndSave(
     if (!audioDir.exists()) audioDir.mkdirs()
     val outputFile = File(audioDir, "$fileName.mp3")
 
-    extractAudioFromVideo(context, videoUri, outputFile) { success,exception ->
+
+
+
+    extractAudioFromVideo(context, videoUri, outputFile, onProgress) { success, exception ->
         if (success) {
             onComplete(outputFile)
         } else {
-            Log.d("error","$exception")
+            Log.d("error", "$exception")
             onFailed()
         }
     }
+//    extractAudioFromVideo(context, videoUri, outputFile,
+//        onProgress = { progress ->
+//            // Forward progress to the service (or notification)
+//            onProgress(progress)
+//        },
+//        onComplete = { success, exception ->
+//            if (success) {
+//                onComplete(outputFile)
+//            } else {
+//                Log.d("error", "$exception")
+//                onFailed()
+//            }
+//        }
+//    )
+//        ) { success,exception ->
+//        if (success) {
+//            onComplete(outputFile)
+//        } else {
+//            Log.d("error","$exception")
+//            onFailed()
+//        }
+//    }
 }

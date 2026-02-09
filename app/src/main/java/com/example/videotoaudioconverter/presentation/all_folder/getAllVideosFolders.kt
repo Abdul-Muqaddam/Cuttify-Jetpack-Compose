@@ -7,7 +7,9 @@ import java.io.File
 
 data class VideoFolder(
     val name: String,
-    val path: String
+    val path: String,
+    val dateAdded: Long = 0L,
+    val size: Long = 0L
 )
 
 fun getAllVideoFolders(context: Context): List<VideoFolder> {

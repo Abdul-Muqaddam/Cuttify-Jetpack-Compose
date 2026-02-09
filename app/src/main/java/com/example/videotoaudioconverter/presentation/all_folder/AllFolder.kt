@@ -12,17 +12,28 @@ import com.example.videotoaudioconverter.presentation.all_folder.components.Fold
 import com.example.videotoaudioconverter.presentation.all_video_files.components.TopBarFilter
 
 @Composable
-fun AllFolder(listOfAllFolders:(List<VideoFolder>)->Unit, navigateToFolderVideos: (String) -> Unit, state: VideoToAudioConverterViewModelState) {
+fun AllFolder(
+    listOfAllFolders: (List<VideoFolder>) -> Unit,
+    navigateToFolderVideos: (String) -> Unit,
+    state: VideoToAudioConverterViewModelState,
+    sortFilter: (String) -> Unit
+) {
 
     val context = LocalContext.current
 
     LaunchedEffect(Unit) {
-       listOfAllFolders(getAllVideoFolders(context))
+        listOfAllFolders(getAllVideoFolders(context))
     }
 
 
     Column(modifier = Modifier.fillMaxSize()) {
-        TopBarFilter(state.filteredFolders.size, filterClicked = {})
+        TopBarFilter(
+            totalItems = state.filteredFolders.size,
+            filterClicked = {
+                    selectedOption ->
+                sortFilter(selectedOption)
+            }
+        )
         LazyColumn {
             items(state.filteredFolders) { folderModel ->
                 FolderComponentUi(

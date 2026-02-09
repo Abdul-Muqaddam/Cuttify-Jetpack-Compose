@@ -86,4 +86,14 @@
     <string name="small_to_large">Small to Large</string>
     <string name="large_to_small">Large To Small</string>
     <string name="select_audio">Select Audio</string>
+    <string name="auto_renewal_and_cancel_anytime">Auto-renewal and cancel anytime</string>
+    <string name="subscribe_12_year">Subscribe 12/year</string>
+    <string name="and_much_more">And much more</string>
+    <string name="instant_support">Instant support</string>
+    <string name="completely_unlimited_access">Completely unlimited access</string>
+    <string name="remove_ads">Remove ads</string>
+    <string name="even_higher_quality">Even higher quality</string>
+    <string name="superior_audio_editing_experience">Superior audio editing experience</string>
+    <string name="_10_10">10/10</string>
+    <string name="go_premium">Go Premium</string>
 </resources>

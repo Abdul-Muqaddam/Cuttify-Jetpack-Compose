@@ -39,7 +39,9 @@ fun MainScreen(
     navigateToAudioPlayerScreen:()->Unit,
     navigateToVideToAudioConverter:(String)->Unit,
     navigateToSettingScreen: () -> Unit,
-    navigateToSetRingtoneScreen:()->Unit
+    navigateToSetRingtoneScreen:()->Unit,
+    navigateToAudioCutterSelection:()->Unit,
+    navigateToPremiumScreen: ()->Unit
 ) {
     val pagerState = rememberPagerState(0, pageCount = { 3 })
     val scope = rememberCoroutineScope()
@@ -97,6 +99,10 @@ fun MainScreen(
                     navigateToSetRingtoneScreen()
                 },navigateToAudioPlayerScreen={
                     navigateToAudioPlayerScreen()
+                }, navigateToAudioCutterSelection = {
+                    navigateToAudioCutterSelection()
+                }, navigateToPremiumScreen = {
+                    navigateToPremiumScreen()
                 }
                     )
 

@@ -25,6 +25,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.example.videotoaudioconverter.R
 import com.example.videotoaudioconverter.ui.theme.MyColors
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
+import androidx.compose.ui.platform.LocalContext
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
 
@@ -33,6 +37,7 @@ fun SetRingtoneScreen(
     navigateBackToMainScreen: () -> Unit,
     navigateToAudioSelection: (String) -> Unit
 ) {
+    val context = LocalContext.current
     Column(modifier = Modifier.padding(horizontal = 15.sdp)) {
         Row(
             modifier = Modifier
@@ -60,7 +65,17 @@ fun SetRingtoneScreen(
             mainImg = R.drawable.ic_music_fill,
             mainText = R.string.ringtone,
             rightImg = R.drawable.ic_front_arrow,
-            onClick = { navigateToAudioSelection("ringtone") }
+            onClick = {
+                if (!Settings.System.canWrite(context)) {
+                    val intent = Intent(
+                        Settings.ACTION_MANAGE_WRITE_SETTINGS,
+                        Uri.parse("package:${context.packageName}")
+                    )
+                    context.startActivity(intent)
+                } else {
+                    navigateToAudioSelection("ringtone")
+                }
+            }
         )
 
         SetRingtoneScreenCard(

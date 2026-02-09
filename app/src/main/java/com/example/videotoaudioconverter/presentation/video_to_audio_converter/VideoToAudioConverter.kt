@@ -1,5 +1,6 @@
 package com.example.videotoaudioconverter.presentation.video_to_audio_converter
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.widget.Toast
@@ -33,12 +34,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.core.content.ContextCompat
 import com.example.videotoaudioconverter.R
 import com.example.videotoaudioconverter.presentation.all_folder.AllFolder
 import com.example.videotoaudioconverter.presentation.all_folder.VideoToAudioConverterViewModel
 import com.example.videotoaudioconverter.presentation.all_video_files.AllVideoFiles
 import com.example.videotoaudioconverter.presentation.home_screen.component.VerticalSpacer
 import com.example.videotoaudioconverter.presentation.video_to_audio_converter.component.TopBar
+import com.example.videotoaudioconverter.service.VideoToAudioService
 import com.example.videotoaudioconverter.ui.theme.MyColors
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
@@ -79,7 +82,7 @@ fun VideoToAudioConverterScreen(
                 .background(Color.White)
                 .padding(paddingValues)
         ) {
-            VerticalSpacer(26)
+            VerticalSpacer(25)
 
             val tabs = listOf(
                 Pair(R.string.all, 0),
@@ -137,6 +140,13 @@ fun VideoToAudioConverterScreen(
                 when (page) {
                     0 -> AllVideoFiles(videoClicked = { videoUri, videoTitle ->
 
+//                        val intent =
+//                            Intent(context, VideoToAudioService::class.java).apply {
+//                                putExtra("VIDEO_URI", videoUri.toString())
+//                                putExtra("VIDEO_TITLE", videoTitle)
+//                            }
+//
+//                        ContextCompat.startForegroundService(context, intent)
                         if(fromWhichScreen=="from_audio_to_video_converter"){
 
                         videoClicked(videoUri, videoTitle)
@@ -150,11 +160,16 @@ fun VideoToAudioConverterScreen(
                         viewModel.onSortFilterChange(context, it)
                     })
 
-                    1 -> AllFolder(navigateToFolderVideos = {
-                        navigateToFolderVideos(it)
-                    }, state = state, listOfAllFolders = {
-                        viewModel.folderListUpdate(it)
-                    })
+                    1 -> AllFolder(
+                        navigateToFolderVideos = { navigateToFolderVideos(it) },
+                        state = state,
+                        listOfAllFolders = { viewModel.folderListUpdate(it) },
+                        sortFilter = {
+//                            viewModel.onSortFilterChange(context, it)
+                            filterOption ->
+                            viewModel.onSortFilterChange(context, filterOption)
+                        }
+                    )
 
                 }
             }

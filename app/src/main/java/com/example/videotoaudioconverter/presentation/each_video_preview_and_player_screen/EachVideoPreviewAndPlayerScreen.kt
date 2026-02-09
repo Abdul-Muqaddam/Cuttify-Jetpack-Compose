@@ -1,5 +1,7 @@
 package com.example.videotoaudioconverter.presentation.each_video_preview_and_player_screen
 
+import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.view.ViewGroup
 import android.widget.Toast
@@ -34,12 +36,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.ContextCompat
 import androidx.media3.common.MediaItem
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import com.example.videotoaudioconverter.R
 import com.example.videotoaudioconverter.presentation.home_screen.component.VerticalSpacer
+import com.example.videotoaudioconverter.service.VideoToAudioService
 import com.example.videotoaudioconverter.ui.theme.MyColors
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
@@ -65,7 +69,9 @@ fun EachVideoPreviewAndPlayerScreen(
         viewModel.setVideoFileNameWithoutExtension(originalName)
     }
     val exoPlayer = remember {
-        ExoPlayer.Builder(context).setSeekForwardIncrementMs(15000).setSeekBackIncrementMs(15000)
+        ExoPlayer.Builder(context)
+            .setSeekForwardIncrementMs(15000)
+            .setSeekBackIncrementMs(15000)
             .build().apply {
                 val mediaItem = MediaItem.fromUri(videoUri)
                 setMediaItem(mediaItem)
@@ -74,19 +80,14 @@ fun EachVideoPreviewAndPlayerScreen(
             }
     }
 
-    DisposableEffect(
-        Unit
-    ) {
-        onDispose {
-            exoPlayer.release()
-        }
+    DisposableEffect(Unit) {
+        onDispose { exoPlayer.release() }
     }
 
     Column(modifier = Modifier.background(MyColors.GreenF1C)) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-
                 .padding(top = 30.sdp, start = 16.sdp, end = 16.sdp, bottom = 20.sdp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
@@ -140,7 +141,8 @@ fun EachVideoPreviewAndPlayerScreen(
                         setShowFastForwardButton(true)
                         setShowRewindButton(true)
                         layoutParams = ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT
                         )
                     }
                 })
@@ -164,14 +166,26 @@ fun EachVideoPreviewAndPlayerScreen(
                         .background(
                             MyColors.Green94F,
                             shape = RoundedCornerShape(20.sdp)
-                        ), colors = ButtonDefaults.buttonColors(Color.Transparent), onClick = {
+                        ), colors = ButtonDefaults.buttonColors(Color.Transparent),
+                    onClick = {
+
+                        val intent = Intent(context, VideoToAudioService::class.java).apply {
+                            putExtra("VIDEO_URI", videoUri.toString())
+                            putExtra("FILE_NAME", state.videoFileNameWithoutExtension)
+                        }
+                        ContextCompat.startForegroundService(context, intent)
+
                         extractAudioAndSave(
                             context = context,
                             videoUri = videoUri,
                             fileName = state.videoFileNameWithoutExtension,
+                            onProgress = { progress ->
+                                sendProgressToService(context, progress)
+                            },
                             onComplete = { outputFile ->
 
                                 CoroutineScope(Dispatchers.Main).launch {
+                                    sendProgressToService(context, 100)
                                     navigateToSuccessScreen(
                                         outputFile.nameWithoutExtension,
                                         outputFile.absolutePath
@@ -189,11 +203,12 @@ fun EachVideoPreviewAndPlayerScreen(
                                         context,
                                         "Something Went Wrong",
                                         Toast.LENGTH_SHORT
-                                    )
-                                        .show()
+                                    ).show()
                                 }
-                            })
-                    }) {
+                            }
+                        )
+                    }
+                ) {
                     Text(
                         fontSize = 16.ssp,
                         color = Color.White,
@@ -204,4 +219,13 @@ fun EachVideoPreviewAndPlayerScreen(
         }
 
     }
+
+}
+
+private fun sendProgressToService(context: Context, progress: Int) {
+    val intent = Intent(context, VideoToAudioService::class.java).apply {
+        action = VideoToAudioService.ACTION_UPDATE_PROGRESS
+        putExtra(VideoToAudioService.EXTRA_PROGRESS, progress)
+    }
+    ContextCompat.startForegroundService(context, intent)
 }

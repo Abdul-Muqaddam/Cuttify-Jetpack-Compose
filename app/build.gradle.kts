@@ -59,14 +59,23 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.ffmpeg.kit.full)
     implementation("com.airbnb.android:lottie-compose:6.6.7")
     implementation("com.github.Kaaveh:sdp-compose:1.1.0")
     implementation("io.insert-koin:koin-core:4.1.0")
     implementation("io.insert-koin:koin-android:4.1.0")
     implementation("io.insert-koin:koin-androidx-compose:4.1.0")
     implementation("androidx.compose.material3:material3:1.2.1")
-    implementation("androidx.media3:media3-exoplayer:1.8.0")
-    implementation("androidx.media3:media3-exoplayer-dash:1.8.0")
-    implementation("androidx.media3:media3-ui:1.8.0")
+    implementation("androidx.media3:media3-exoplayer:1.9.0")
+    implementation("androidx.media3:media3-exoplayer-dash:1.9.0")
+    implementation("androidx.media3:media3-ui:1.9.0")
+    implementation("androidx.media3:media3-session:1.9.0")
+    implementation("androidx.media:media:1.7.1")
+    implementation("com.google.accompanist:accompanist-pager:0.31.3-beta")
+    implementation("com.google.accompanist:accompanist-pager-indicators:0.31.3-beta")
+    implementation("com.squareup.okhttp3:okhttp:4.11.0")
+
+
+
 
 }

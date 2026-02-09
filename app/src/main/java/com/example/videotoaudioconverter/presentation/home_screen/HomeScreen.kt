@@ -44,9 +44,11 @@ import ir.kaaveh.sdpcompose.ssp
 @Composable
 fun HomeScreen(
     navigateToAudioPlayerScreen:()->Unit,
+    navigateToPremiumScreen:()-> Unit,
     navigateToSettingScreen: () -> Unit,
                navigateToVideToAudioConverter: (String) -> Unit,
-               navigateToSetRingtoneScreen:()->Unit
+               navigateToSetRingtoneScreen:()->Unit,
+               navigateToAudioCutterSelection:()->Unit
 ) {
     val context = LocalContext.current
     var isPermissionForVideoAndImage by remember { mutableStateOf(false) }
@@ -96,7 +98,8 @@ fun HomeScreen(
                     contentDescription = null
                 )
                 Image(
-                    modifier = Modifier.size(24.sdp),
+                    modifier = Modifier.size(24.sdp)
+                        .clickable {navigateToPremiumScreen()},
                     painter = painterResource(R.drawable.ic_diamond),
                     contentDescription = null
                 )
@@ -163,7 +166,7 @@ fun HomeScreen(
                 imgHeight = 30,
                 img = R.drawable.ic_audio_cutter,
                 text = stringResource(R.string.audio_cutter),
-                onClick = {}
+                onClick = { navigateToAudioCutterSelection() }
             )
             FeatureCard(
                 imgWidth = 65,

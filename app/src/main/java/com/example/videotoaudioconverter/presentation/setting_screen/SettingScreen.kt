@@ -1,92 +1,233 @@
 package com.example.videotoaudioconverter.presentation.setting_screen
 
+import android.Manifest
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
 import androidx.compose.ui.graphics.Color
+import androidx.compose.foundation.rememberScrollState
 import android.provider.CalendarContract
+import android.provider.Settings
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.core.content.FileProvider
 import com.example.videotoaudioconverter.R
 import com.example.videotoaudioconverter.ui.theme.MyColors
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+
+fun shareInstalledApk(context: Context){
+    try {
+        val appInfo = context.packageManager.getApplicationInfo(context.packageName, 0)
+        val installedApk = File(appInfo.sourceDir)
+
+        if (!installedApk.exists()){
+            Toast.makeText(context, "Installed Apk Not Found", Toast.LENGTH_SHORT).show()
+            return
+        }
+        val cacheDir = File(context.cacheDir,"shared_apk")
+        if (!cacheDir.exists())cacheDir.mkdirs()
+
+        val outFile = File(cacheDir,"${context.packageName}.apk")
+        if (!outFile.exists())outFile.delete()
+
+        FileInputStream(installedApk).use { input ->
+            FileOutputStream(outFile).use { output ->
+                val buffer = ByteArray(4096)
+                var bytesRead : Int
+                while (input.read(buffer).also { bytesRead = it }!=-1){
+                    output.write(buffer,0,bytesRead)
+                }
+                output.flush()
+            }
+        }
+        val uri = FileProvider.getUriForFile(
+            context,
+            "${context.packageName}.provider",
+            outFile
+        )
+
+        val intent = Intent(Intent.ACTION_SEND).apply {
+            type ="application/vnd.android.package-archive"
+            putExtra(Intent.EXTRA_STREAM, uri)
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+
+        context.startActivity(Intent.createChooser(intent, "Share App Apk"))
+    }catch (e: Exception){
+        e.printStackTrace()
+        Toast.makeText(context, "Unable to share Apk", Toast.LENGTH_SHORT).show()
+    }
+}
+
+fun openAppNotificationSettings(context: Context) {
+    val intent = Intent().apply {
+        action = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Settings.ACTION_APP_NOTIFICATION_SETTINGS
+        } else {
+            Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+        } else {
+            data = Uri.parse("package:${context.packageName}")
+        }
+    }
+    context.startActivity(intent)
+}
+
 
 @Composable
-fun SettingScreen(navigateToLanguageScreen:()-> Unit,
-                  navigateToFeedbackScreen:()-> Unit,
-                  navigateToRateUsScreen:()-> Unit) {
-    Column{
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .height(160.sdp)
-            .padding(top = 35.sdp),
+fun SettingScreen(
+    navigateToLanguageScreen: () -> Unit,
+    navigateToFeedbackScreen: () -> Unit,
+    navigateToRateUsScreen: () -> Unit,
+    navigateBackToMainScreen: () -> Unit,
+    navigateToPremiumScreen: ()-> Unit,
+    navigateToPrivacyPolicyScreen:()->Unit
+) {
+    val scrollState = rememberScrollState()
+    val context = LocalContext.current
+    val appVersion = getAppVersionName(context)
+//    var showNotificationDialog by remember { mutableStateOf(false) }
+
+    val notificationPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { granted ->
+            if (granted) {
+                Toast.makeText(context, "Notifications enabled!", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(context, "Permission denied", Toast.LENGTH_SHORT).show()
+            }
+        }
+    )
+
+    Column(
+        modifier = Modifier
+            .padding(horizontal = 10.sdp)
+            .fillMaxSize()
+            .verticalScroll(scrollState),
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 30.sdp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                painter = painterResource(R.drawable.ic_baseline_arrow_back),
+                contentDescription = null,
+                modifier = Modifier
+                    .height(22.sdp)
+                    .width(22.sdp)
+                    .clickable { navigateBackToMainScreen() }
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            Text(
+                text = "Settings",
+                fontSize = 22.ssp,
+                color = MyColors.Green058,
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(modifier = Modifier.weight(1f))
+        }
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 30.sdp)
+                .clickable { navigateToPremiumScreen() },
             contentAlignment = Alignment.Center
-            ) {
+        ) {
             Image(
                 modifier = Modifier.fillMaxWidth(),
                 painter = painterResource(R.drawable.ic_main_gradient),
                 contentDescription = null
             )
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+
+            Row(
+                modifier = Modifier
+                    .padding(start = 10.sdp, top = 7.sdp)
+                    .align(Alignment.TopStart),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
             ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Image(painter = painterResource(R.drawable.ic_crown),contentDescription = null,
-                        modifier = Modifier
-                            .width(65.sdp)
-                            .height(65.sdp))
-                    Column(modifier = Modifier.padding(start = 14.sdp)) {
-                        Text(text = stringResource(R.string.upgrade_premium),
-                            color = Color.White,
-                            fontSize = 22.ssp,
-                            fontWeight = FontWeight.Bold
-                            )
-                        Text(text = stringResource(R.string.enjoy_all_premium_features),
-                            color = Color.White,
-                            fontSize = 13.ssp,
-                            modifier = Modifier.padding(top = 10.sdp, bottom = 3.sdp)
-                        )
-                    }
+                Image(
+                    painter = painterResource(R.drawable.ic_crown),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .width(65.sdp)
+                        .height(65.sdp)
+                )
+                Column(modifier = Modifier.padding(start = 14.sdp)) {
+                    Text(
+                        text = stringResource(R.string.upgrade_premium),
+                        color = Color.White,
+                        fontSize = 16.ssp,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = stringResource(R.string.enjoy_all_premium_features),
+                        color = Color.White,
+                        fontSize = 12.ssp,
+                        modifier = Modifier.padding(top = 5.sdp)
+                    )
                 }
             }
+
         }
 
         Column(
-            modifier = Modifier
-                .padding(horizontal = 15.sdp)
+            modifier = Modifier.padding(top = 10.sdp)
         ) {
-
-
             Text(
                 text = stringResource(R.string.general),
-                fontSize = 20.ssp,
+                fontSize = 18.ssp,
                 fontWeight = FontWeight.Bold,
-                color = MyColors.Green058,
-                modifier = Modifier.padding(top = 5.sdp)
+                color = MyColors.Green058
             )
             SettingsScreenCard(
-                onClick = {navigateToLanguageScreen()},
+                onClick = { navigateToLanguageScreen() },
                 mainImg = R.drawable.ic_globe,
                 mainText = R.string.select_languauges,
                 subText = R.string.phone_default,
@@ -96,33 +237,34 @@ fun SettingScreen(navigateToLanguageScreen:()-> Unit,
                 mainImg = R.drawable.ic_bell,
                 mainText = R.string.notifications,
                 subText = R.string.enable_recommended_notifications,
-                rightImg = R.drawable.ic_front_arrow
+                rightImg = R.drawable.ic_front_arrow,
+                onClick = { openAppNotificationSettings(context) }
             )
         }
         Column(
             modifier = Modifier
                 .fillMaxHeight()
-                .padding(horizontal = 15.sdp)
-                .padding(top = 15.sdp)
+                .padding(top = 10.sdp)
+
         ) {
 
 
             Text(
                 text = stringResource(R.string.about),
-                fontSize = 20.ssp,
+                fontSize = 18.ssp,
                 fontWeight = FontWeight.Bold,
                 color = MyColors.Green058
             )
 
             SettingsScreenCard(
-                onClick = {navigateToFeedbackScreen()},
+                onClick = { navigateToFeedbackScreen() },
                 mainImg = R.drawable.ic_text,
                 mainText = R.string.feedback,
                 subText = R.string.let_us_know_your_experience_with_app,
                 rightImg = R.drawable.ic_front_arrow
             )
             SettingsScreenCard(
-                onClick = {navigateToRateUsScreen()},
+                onClick = { navigateToRateUsScreen() },
                 mainImg = R.drawable.ic_rateing,
                 mainText = R.string.rate_us,
                 subText = R.string.give_us_rating_how_much_you_like_app,
@@ -132,30 +274,63 @@ fun SettingScreen(navigateToLanguageScreen:()-> Unit,
                 mainImg = R.drawable.ic_sharing,
                 mainText = R.string.share_app,
                 subText = R.string.give_us_a_help_to_share_this_app,
+                onClick = { shareInstalledApk(context) },
                 rightImg = R.drawable.ic_front_arrow
             )
             SettingsScreenCard(
                 mainImg = R.drawable.ic_seacurity,
                 mainText = R.string.privacy_policy,
                 subText = R.string.learn_our_terms_conditions,
+                onClick = {
+                    navigateToPrivacyPolicyScreen()
+                },
                 rightImg = R.drawable.ic_front_arrow
             )
             SettingsScreenCard(
                 mainImg = R.drawable.ic_version,
                 mainText = R.string.version,
-                subText = R.string._1_01,
+                subText = null,
+                subTextText = appVersion,
                 rightImg = R.drawable.ic_front_arrow
             )
-
         }
+
+//        if (showNotificationDialog) {
+//            AlertDialog(
+//                onDismissRequest = { showNotificationDialog = false },
+//                title = { Text("Notification Permission") },
+//                text = { Text("This app would like to send you notifications. Please allow notifications.") },
+//                confirmButton = {
+//                    TextButton(onClick = {
+//                        showNotificationDialog = false
+//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+//                            notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+//                        } else {
+//                            Toast.makeText(context, "Notifications enabled!", Toast.LENGTH_SHORT).show()
+//                        }
+//                    }) {
+//                        Text("Allow")
+//                    }
+//                },
+//                dismissButton = {
+//                    TextButton(onClick = { showNotificationDialog = false }) {
+//                        Text("Deny")
+//                    }
+//                }
+//            )
+//        }
     }
 }
+
 @Composable
-fun SettingsScreenCard(mainImg: Int,
-                       mainText: Int,
-                       subText: Int,
-                       rightImg: Int,
-                       onClick:()-> Unit={}) {
+fun SettingsScreenCard(
+    mainImg: Int,
+    mainText: Int,
+    subText: Int? = null,
+    subTextText: String? = null,
+    rightImg: Int,
+    onClick: () -> Unit = {}
+) {
     Column(modifier = Modifier.padding(5.sdp)) {
 
         Card(
@@ -177,7 +352,7 @@ fun SettingsScreenCard(mainImg: Int,
                     contentDescription = null,
                     modifier = Modifier
                         .padding(end = 10.sdp)
-                        .size(26.sdp)
+                        .size(24.sdp)
                         .align(Alignment.CenterVertically)
                 )
                 Column(
@@ -186,14 +361,31 @@ fun SettingsScreenCard(mainImg: Int,
                 ) {
                     Text(
                         text = stringResource(mainText),
-                        fontSize = 14.ssp,
+                        fontSize = 12.ssp,
                         color = Color.Black
                     )
-                    Text(
-                        text = stringResource(subText),
-                        fontSize = 12.ssp,
-                        color = MyColors.greyD56_80
-                    )
+//                    Text(
+//                        text = stringResource(subText),
+//                        fontSize = 10.ssp,
+//                        color = MyColors.greyD56_80
+//                    )
+                    when {
+                        subText != null -> {
+                            Text(
+                                text = stringResource(subText),
+                                fontSize = 10.ssp,
+                                color = MyColors.greyD56_80
+                            )
+                        }
+
+                        subTextText != null -> {
+                            Text(
+                                text = subTextText,
+                                fontSize = 10.ssp,
+                                color = MyColors.greyD56_80
+                            )
+                        }
+                    }
                 }
                 Image(
                     painter = painterResource(rightImg),
@@ -204,5 +396,289 @@ fun SettingsScreenCard(mainImg: Int,
     }
 }
 
+fun getAppVersionName(context: Context): String {
+    return try {
+        val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
+        packageInfo.versionName ?: "Unknown"
+    } catch (e: PackageManager.NameNotFoundException) {
+        "Unknown"
+    }
+}
 
 
+
+
+
+//import androidx.compose.ui.graphics.Color
+//import android.provider.CalendarContract
+//import androidx.compose.foundation.Image
+//import androidx.compose.foundation.layout.Arrangement
+//import androidx.compose.foundation.layout.Box
+//import androidx.compose.foundation.layout.Column
+//import androidx.compose.foundation.layout.Row
+//import androidx.compose.foundation.layout.fillMaxHeight
+//import androidx.compose.foundation.layout.fillMaxWidth
+//import androidx.compose.foundation.layout.height
+//import androidx.compose.foundation.layout.padding
+//import androidx.compose.foundation.layout.size
+//import androidx.compose.foundation.layout.width
+//import androidx.compose.foundation.shape.RoundedCornerShape
+//import androidx.compose.material3.Card
+//import androidx.compose.material3.CardDefaults
+//import androidx.compose.material3.Text
+//import androidx.compose.runtime.Composable
+//import androidx.compose.ui.Alignment
+//import androidx.compose.ui.Modifier
+//import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
+//import androidx.compose.ui.modifier.modifierLocalConsumer
+//import androidx.compose.ui.res.painterResource
+//import androidx.compose.ui.res.stringResource
+//import androidx.compose.ui.text.font.FontWeight
+//import com.example.videotoaudioconverter.R
+//import com.example.videotoaudioconverter.ui.theme.MyColors
+//import ir.kaaveh.sdpcompose.sdp
+//import ir.kaaveh.sdpcompose.ssp
+//
+//
+//fun shareInstalledApk(context: Context){
+//    try {
+//        val appInfo = context.packageManager.getApplicationInfo(context.packageName, 0)
+//        val installedApk = File(appInfo.sourceDir)
+//
+//        if (!installedApk.exists()){
+//            Toast.makeText(context, "Installed Apk Not Found", Toast.LENGTH_SHORT).show()
+//            return
+//        }
+//        val cacheDir = File(context.cacheDir,"shared_apk")
+//        if (!cacheDir.exists())cacheDir.mkdirs()
+//
+//        val outFile = File(cacheDir,"${context.packageName}.apk")
+//        if (!outFile.exists())outFile.delete()
+//
+//        FileInputStream(installedApk).use { input ->
+//            FileOutputStream(outFile).use { output ->
+//                val buffer = ByteArray(4096)
+//                var bytesRead : Int
+//                while (input.read(buffer).also { bytesRead = it }!=-1){
+//                    output.write(buffer,0,bytesRead)
+//                }
+//                output.flush()
+//            }
+//        }
+//        val uri = FileProvider.getUriForFile(
+//            context,
+//            "${context.packageName}.provider",
+//            outFile
+//        )
+//
+//        val intent = Intent(Intent.ACTION_SEND).apply {
+//            type ="application/vnd.android.package-archive"
+//            putExtra(Intent.EXTRA_STREAM, uri)
+//            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+//        }
+//
+//        context.startActivity(Intent.createChooser(intent, "Share App Apk"))
+//    }catch (e: Exception){
+//        e.printStackTrace()
+//        Toast.makeText(context, "Unable to share Apk", Toast.LENGTH_SHORT).show()
+//    }
+//}
+//
+//fun openAppNotificationSettings(context: Context) {
+//    val intent = Intent().apply {
+//        action = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            Settings.ACTION_APP_NOTIFICATION_SETTINGS
+//        } else {
+//            Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+//        }
+//
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+//        } else {
+//            data = Uri.parse("package:${context.packageName}")
+//        }
+//    }
+//    context.startActivity(intent)
+//}
+//
+//
+//@Composable
+//fun SettingScreen(navigateToLanguageScreen:()-> Unit,
+//                  navigateToFeedbackScreen:()-> Unit,
+//                  navigateToRateUsScreen:()-> Unit) {
+//    val scrollState = rememberScrollState()
+//    val context = LocalContext.current
+//    Column{
+//        Box(modifier = Modifier
+//            .fillMaxWidth()
+//            .height(160.sdp)
+//            .padding(top = 35.sdp),
+//            contentAlignment = Alignment.Center
+//            ) {
+//            Image(
+//                modifier = Modifier.fillMaxWidth(),
+//                painter = painterResource(R.drawable.ic_main_gradient),
+//                contentDescription = null
+//            )
+//            Column(
+//                modifier = Modifier.fillMaxWidth(),
+//                horizontalAlignment = Alignment.CenterHorizontally,
+//                verticalArrangement = Arrangement.Center
+//            ) {
+//                Row(verticalAlignment = Alignment.CenterVertically) {
+//                    Image(painter = painterResource(R.drawable.ic_crown),contentDescription = null,
+//                        modifier = Modifier
+//                            .width(65.sdp)
+//                            .height(65.sdp))
+//                    Column(modifier = Modifier.padding(start = 14.sdp)) {
+//                        Text(text = stringResource(R.string.upgrade_premium),
+//                            color = Color.White,
+//                            fontSize = 22.ssp,
+//                            fontWeight = FontWeight.Bold
+//                            )
+//                        Text(text = stringResource(R.string.enjoy_all_premium_features),
+//                            color = Color.White,
+//                            fontSize = 13.ssp,
+//                            modifier = Modifier.padding(top = 10.sdp, bottom = 3.sdp)
+//                        )
+//                    }
+//                }
+//            }
+//        }
+//
+//        Column(
+//            modifier = Modifier
+//                .padding(horizontal = 15.sdp)
+//        ) {
+//
+//
+//            Text(
+//                text = stringResource(R.string.general),
+//                fontSize = 20.ssp,
+//                fontWeight = FontWeight.Bold,
+//                color = MyColors.Green058,
+//                modifier = Modifier.padding(top = 5.sdp)
+//            )
+//            SettingsScreenCard(
+//                onClick = {navigateToLanguageScreen()},
+//                mainImg = R.drawable.ic_globe,
+//                mainText = R.string.select_languauges,
+//                subText = R.string.phone_default,
+//                rightImg = R.drawable.ic_front_arrow
+//            )
+//            SettingsScreenCard(
+//                onClick ={openAppNotificationSettings(context)},
+//                mainImg = R.drawable.ic_bell,
+//                mainText = R.string.notifications,
+//                subText = R.string.enable_recommended_notifications,
+//                rightImg = R.drawable.ic_front_arrow
+//            )
+//        }
+//        Column(
+//            modifier = Modifier
+//                .fillMaxHeight()
+//                .padding(horizontal = 15.sdp)
+//                .padding(top = 15.sdp)
+//        ) {
+//
+//
+//            Text(
+//                text = stringResource(R.string.about),
+//                fontSize = 20.ssp,
+//                fontWeight = FontWeight.Bold,
+//                color = MyColors.Green058
+//            )
+//
+//            SettingsScreenCard(
+//                onClick = {navigateToFeedbackScreen()},
+//                mainImg = R.drawable.ic_text,
+//                mainText = R.string.feedback,
+//                subText = R.string.let_us_know_your_experience_with_app,
+//                rightImg = R.drawable.ic_front_arrow
+//            )
+//            SettingsScreenCard(
+//                onClick = {navigateToRateUsScreen()},
+//                mainImg = R.drawable.ic_rateing,
+//                mainText = R.string.rate_us,
+//                subText = R.string.give_us_rating_how_much_you_like_app,
+//                rightImg = R.drawable.ic_front_arrow
+//            )
+//            SettingsScreenCard(
+//                onClick = {shareInstalledApk(context)},
+//                mainImg = R.drawable.ic_sharing,
+//                mainText = R.string.share_app,
+//                subText = R.string.give_us_a_help_to_share_this_app,
+//                rightImg = R.drawable.ic_front_arrow
+//            )
+//            SettingsScreenCard(
+//                mainImg = R.drawable.ic_seacurity,
+//                mainText = R.string.privacy_policy,
+//                subText = R.string.learn_our_terms_conditions,
+//                rightImg = R.drawable.ic_front_arrow
+//            )
+//            SettingsScreenCard(
+//                mainImg = R.drawable.ic_version,
+//                mainText = R.string.version,
+//                subText = R.string._1_01,
+//                rightImg = R.drawable.ic_front_arrow
+//            )
+//
+//        }
+//    }
+//}
+//@Composable
+//fun SettingsScreenCard(mainImg: Int,
+//                       mainText: Int,
+//                       subText: Int,
+//                       rightImg: Int,
+//                       onClick:()-> Unit={}) {
+//    Column(modifier = Modifier.padding(5.sdp)) {
+//
+//        Card(
+//            onClick = onClick,
+//            colors = CardDefaults.cardColors(Color.White),
+//            shape = RoundedCornerShape(12.sdp),
+//            elevation = CardDefaults.cardElevation(2.sdp),
+//            modifier = Modifier
+//                .fillMaxWidth()
+//        ) {
+//
+//            Row(
+//                modifier = Modifier
+//                    .padding(8.sdp),
+//                verticalAlignment = Alignment.CenterVertically
+//            ) {
+//                Image(
+//                    painter = painterResource(mainImg),
+//                    contentDescription = null,
+//                    modifier = Modifier
+//                        .padding(end = 10.sdp)
+//                        .size(26.sdp)
+//                        .align(Alignment.CenterVertically)
+//                )
+//                Column(
+//                    modifier = Modifier
+//                        .weight(1f)
+//                ) {
+//                    Text(
+//                        text = stringResource(mainText),
+//                        fontSize = 14.ssp,
+//                        color = Color.Black
+//                    )
+//                    Text(
+//                        text = stringResource(subText),
+//                        fontSize = 12.ssp,
+//                        color = MyColors.greyD56_80
+//                    )
+//                }
+//                Image(
+//                    painter = painterResource(rightImg),
+//                    contentDescription = null
+//                )
+//            }
+//        }
+//    }
+//}
+//
+//
+//

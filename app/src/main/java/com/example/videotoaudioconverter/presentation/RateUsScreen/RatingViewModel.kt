@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.update
 
 
 data class RatingUiState(
-    val selectedstars : Int = 0
+    val selectedstars : Int = 3
 )
 
 class RatingViewModel : ViewModel() {
