@@ -1,4 +1,4 @@
-package com.example.videotoaudioconverter.presentation.SetRingtoneScreen
+package com.example.videotoaudioconverter.presentation.setRingtone_Screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable

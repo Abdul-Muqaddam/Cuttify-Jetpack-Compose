@@ -1,4 +1,4 @@
-package com.example.videotoaudioconverter.presentation.RateUsScreen
+package com.example.videotoaudioconverter.presentation.rateUs_Screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -26,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import com.example.videotoaudioconverter.R
+import com.example.videotoaudioconverter.presentation.RateUsScreen.RatingViewModel
 import com.example.videotoaudioconverter.ui.theme.MyColors
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp

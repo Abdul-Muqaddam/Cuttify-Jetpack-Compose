@@ -86,7 +86,7 @@ fun AudioCutterScreen(
     audioPath: String,
     audioTitle: String,
     navigateBack: () -> Unit,
-    navigateToSuccess: (String) -> Unit,
+    navigateToSuccess: (String, String) -> Unit,
     viewModel: AudioCutterViewModel = koinViewModel()
 ) {
     val state by viewModel.uiState.collectAsState()
@@ -105,18 +105,23 @@ fun AudioCutterScreen(
         }
     }
 
-    LaunchedEffect(viewModel.trimResult) {
+    LaunchedEffect(Unit) {
         viewModel.trimResult.collectLatest { result ->
             when (result) {
                 is AudioCutterViewModel.AudioTrimResult.Success -> {
-                    // Navigate to Success screen with output path
-                    navigateToSuccess(result.outputPath)
+                    Log.d("NAV_DEBUG", "Navigating to success: ${result.outputPath}")
+                    navigateToSuccess(
+                        result.outputPath,
+                        fileName
+                    )
+                    viewModel.resetTrimResult()
                 }
+
                 is AudioCutterViewModel.AudioTrimResult.Error -> {
-                    // Optionally show a Snackbar or Toast
                     Log.e("AudioCutterScreen", "Trim failed: ${result.message}")
                 }
-                else -> {}
+
+                else -> Unit
             }
         }
     }
@@ -218,22 +223,21 @@ fun AudioCutterScreen(
 
             Spacer(modifier = Modifier.height(40.dp))
 
-            // Export Button
             Button(
                 onClick = {
-                    val outputFileName = "${fileName}_${System.currentTimeMillis()}.mp3"
-                    viewModel.exportAudio(outputFileName)
+                    val state = viewModel.uiState.value
+                    val startMs = (state.startFraction * state.totalDuration * 1000).toLong()
+                    val endMs = (state.endFraction * state.totalDuration * 1000).toLong()
+                    val outputName = "${fileName}_${System.currentTimeMillis()}.mp3"
+
+                    viewModel.startAudioTrimService(
+                        context = context,
+                        inputPath = viewModel.getAudioPath(),
+                        outputName = outputName,
+                        startMs = startMs,
+                        endMs = endMs
+                    )
                 },
-//                onClick = {
-//
-//                    if (viewModel.getAudioPath().isNotEmpty()) {
-//                        // Trigger the export function in ViewModel
-//                        viewModel.exportAudio("trimmed_audio_${System.currentTimeMillis()}.mp3")
-//                    } else {
-//                        Log.d("AudioCutter", "Audio path is empty, cannot export")
-//                    }
-//
-//                },
                 modifier = Modifier.fillMaxWidth().height(50.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = MyColors.MainColor),
                 shape = RoundedCornerShape(8.dp)

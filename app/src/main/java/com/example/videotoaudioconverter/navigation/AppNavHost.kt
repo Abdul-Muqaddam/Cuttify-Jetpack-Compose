@@ -5,34 +5,30 @@ import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
+import androidx.core.net.toUri
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.videotoaudioconverter.presentation.FeedbackScreen.FeedbackScreen
-import com.example.videotoaudioconverter.presentation.LanguageScreen.LanguageScreen
-import com.example.videotoaudioconverter.presentation.RateUsScreen.RateUsScreen
-import com.example.videotoaudioconverter.presentation.SetRingtoneScreen.SetRingtoneScreen
+import androidx.navigation.toRoute
+import com.example.videotoaudioconverter.presentation.audio_Merge_Screen.AudioMergeScreen
+import com.example.videotoaudioconverter.presentation.audio_cutter_screen.AudioCutterScreen
+import com.example.videotoaudioconverter.presentation.audio_player_screen.AudioPlayerScreen
 import com.example.videotoaudioconverter.presentation.each_video_preview_and_player_screen.EachVideoPreviewAndPlayerScreen
+import com.example.videotoaudioconverter.presentation.feedbackScreen.FeedbackScreen
+import com.example.videotoaudioconverter.presentation.languageScreen.LanguageScreen
 import com.example.videotoaudioconverter.presentation.main_screen.MainScreen
+import com.example.videotoaudioconverter.presentation.premium_Screen.Premium_Screen
+import com.example.videotoaudioconverter.presentation.privacy_Policy_Screen.PrivacyPolicyScreen
+import com.example.videotoaudioconverter.presentation.rateUs_Screen.RateUsScreen
+import com.example.videotoaudioconverter.presentation.setRingtone_Screen.SetRingtoneScreen
 import com.example.videotoaudioconverter.presentation.setting_screen.SettingScreen
 import com.example.videotoaudioconverter.presentation.splash_screen.SplashScreen
-import com.example.videotoaudioconverter.presentation.video_to_audio_converter.VideoToAudioConverterScreen
-import androidx.core.net.toUri
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import androidx.navigation.NavType
-import androidx.navigation.navArgument
-import androidx.navigation.toRoute
-import com.example.videotoaudioconverter.presentation.Premium_Screen.Premium_Screen
-import com.example.videotoaudioconverter.presentation.PrivacyPolicyScreen.PrivacyPolicyScreen
-import com.example.videotoaudioconverter.presentation.audio_player_screen.AudioPlayerScreen
-import com.example.videotoaudioconverter.presentation.videos_inside_the_folder_screen.VideosInsideTheFolderScreen
 import com.example.videotoaudioconverter.presentation.success_screen.SuccessScreen
 import com.example.videotoaudioconverter.presentation.video_player_screen.VideoPlayerScreen
-import com.example.videotoaudioconverter.presentation.audio_cutter_screen.AudioCutterScreen
+import com.example.videotoaudioconverter.presentation.video_to_audio_converter.VideoToAudioConverterScreen
+import com.example.videotoaudioconverter.presentation.videos_inside_the_folder_screen.VideosInsideTheFolderScreen
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -63,8 +59,14 @@ fun AppNavHost() {
                 },
                 navigateToPremiumScreen = {
                     appDestination.navigateToPremiumScreen()
+                },
+                navigateToAudioMergeScreen = {
+                    appDestination
                 }
             )
+        }
+        composable<Routes.AudioMergeScreenRoute> {
+            AudioMergeScreen()
         }
         composable<Routes.AudioPlayerRoute> {
             AudioPlayerScreen(
@@ -194,8 +196,11 @@ fun AppNavHost() {
                 audioTitle = data.audioTitle,
                 navigateBack = {
                     appDestination.navigateBack()
-                }, navigateToSuccess = { outputPath ->
-                    navController.navigate("success_screen/$outputPath")
+                }, navigateToSuccess = { outputPath, fileName ->
+                    appDestination.navigateToSuccessScreen(
+                        fileName = fileName,
+                        filePath = outputPath
+                    )
                 }
             )
         }

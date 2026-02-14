@@ -19,6 +19,9 @@ class AppDestination(private val navController: NavController) {
     fun navigateToPremiumScreen() {
         navController.navigate(Routes.PremiumScreenRoute)
     }
+    fun navigateToAudioMergeScreen() {
+        navController.navigate(Routes.AudioMergeScreenRoute)
+    }
     fun navigateToPrivacyPolicyScreen() {
         navController.navigate(Routes.PrivacyPolicyScreenRoute)
     }

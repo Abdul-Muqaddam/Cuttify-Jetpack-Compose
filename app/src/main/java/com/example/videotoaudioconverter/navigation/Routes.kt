@@ -17,6 +17,9 @@ sealed class Routes {
     data object PremiumScreenRoute : Routes()
 
     @Serializable
+    data object AudioMergeScreenRoute : Routes()
+
+    @Serializable
     data object PrivacyPolicyScreenRoute : Routes()
 
     @Serializable

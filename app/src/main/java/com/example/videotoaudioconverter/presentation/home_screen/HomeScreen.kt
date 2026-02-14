@@ -46,9 +46,10 @@ fun HomeScreen(
     navigateToAudioPlayerScreen:()->Unit,
     navigateToPremiumScreen:()-> Unit,
     navigateToSettingScreen: () -> Unit,
-               navigateToVideToAudioConverter: (String) -> Unit,
-               navigateToSetRingtoneScreen:()->Unit,
-               navigateToAudioCutterSelection:()->Unit
+    navigateToVideToAudioConverter: (String) -> Unit,
+    navigateToSetRingtoneScreen:()->Unit,
+    navigateToAudioCutterSelection:()->Unit,
+    navigateToAudioMergeScreen:()->Unit
 ) {
     val context = LocalContext.current
     var isPermissionForVideoAndImage by remember { mutableStateOf(false) }
@@ -173,7 +174,7 @@ fun HomeScreen(
                 imgHeight = 30,
                 img = R.drawable.ic_audio_merge,
                 text = stringResource(R.string.audio_merge),
-                onClick = {}
+                onClick = {navigateToAudioMergeScreen()}
             )
         }
         VerticalSpacer(20)

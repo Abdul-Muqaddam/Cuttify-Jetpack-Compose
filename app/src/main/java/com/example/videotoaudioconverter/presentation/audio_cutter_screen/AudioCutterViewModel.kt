@@ -12,7 +12,10 @@ import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import androidx.annotation.OptIn
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
+import androidx.media3.common.util.UnstableApi
 import com.arthenica.ffmpegkit.FFmpegKit
 import com.arthenica.ffmpegkit.ReturnCode
 import com.example.videotoaudioconverter.audio.AudioExporter
@@ -40,7 +43,16 @@ data class AudioCutterUiState(
 )
 
 object AudioTrimCallback {
+
     var viewModel: AudioCutterViewModel? = null
+
+    fun onTrimSuccess(outputPath: String) {
+        viewModel?.onAudioTrimCompleted(outputPath)
+    }
+
+    fun onTrimError(error: String) {
+        viewModel?.onAudioTrimFailed(error)
+    }
 }
 
 class AudioCutterViewModel(
@@ -191,36 +203,39 @@ class AudioCutterViewModel(
             (currentMs + 5000).coerceAtMost((state.endFraction * state.totalDuration * 1000).toLong())
         previewPlayer.seekTo(newMs)
     }
+    fun resetTrimResult() {
+        _trimResult.value = AudioTrimResult.Idle
+    }
 
+    @OptIn(UnstableApi::class)
     @RequiresApi(Build.VERSION_CODES.O)
     fun startAudioTrimService(
         context: Context,
+        inputPath: String,
         outputName: String,
         startMs: Long,
         endMs: Long
     ) {
-        if (cachedInputFile == null || !cachedInputFile!!.exists()) {
-            Log.e("AudioCutter", "Input file missing")
+        // Check if input file exists
+        val inputFile = File(inputPath)
+        if (!inputFile.exists()) {
+            Log.e("AudioCutter", "Input file does not exist: $inputPath")
             return
         }
 
-        val musicDir = File(
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC),
-            "Cuttify/Trimmed Audio"
-        )
-
-        if (!musicDir.exists()) musicDir.mkdirs()
-
-        val outputFile = File(musicDir, "$outputName.mp3")
-
+        // Prepare intent for the foreground service
         val intent = Intent(context, AudioTrimForegroundService::class.java).apply {
-            putExtra("inputPath", cachedInputFile!!.absolutePath)
-            putExtra("startMs", startMs)
-            putExtra("endMs", endMs)
-            putExtra("outputPath", outputFile.absolutePath)
+            putExtra(AudioTrimForegroundService.EXTRA_INPUT_PATH, inputFile.absolutePath)
+            putExtra(AudioTrimForegroundService.EXTRA_OUTPUT_NAME, outputName)
+            putExtra(AudioTrimForegroundService.EXTRA_START_MS, startMs)
+            putExtra(AudioTrimForegroundService.EXTRA_END_MS, endMs)
         }
 
-        context.startForegroundService(intent)
+        // Start the foreground service
+        ContextCompat.startForegroundService(context, intent)
+
+        // Optional: update UI state if you have a MutableStateFlow in ViewModel
+        _uiState.update { it.copy(isExporting = true) }
     }
 
     fun onAudioTrimCompleted(outputPath: String) {

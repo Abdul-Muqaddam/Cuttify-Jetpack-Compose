@@ -41,7 +41,8 @@ fun MainScreen(
     navigateToSettingScreen: () -> Unit,
     navigateToSetRingtoneScreen:()->Unit,
     navigateToAudioCutterSelection:()->Unit,
-    navigateToPremiumScreen: ()->Unit
+    navigateToPremiumScreen: ()->Unit,
+    navigateToAudioMergeScreen:()->Unit
 ) {
     val pagerState = rememberPagerState(0, pageCount = { 3 })
     val scope = rememberCoroutineScope()
@@ -103,6 +104,8 @@ fun MainScreen(
                     navigateToAudioCutterSelection()
                 }, navigateToPremiumScreen = {
                     navigateToPremiumScreen()
+                }, navigateToAudioMergeScreen = {
+                    navigateToAudioMergeScreen()
                 }
                     )
 

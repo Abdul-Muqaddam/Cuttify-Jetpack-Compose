@@ -17,6 +17,12 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        ndk {
+            // Include all ABIs your emulator/device might use
+            abiFilters += listOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
+        }
+
     }
 
     buildTypes {
@@ -38,6 +44,14 @@ android {
     buildFeatures {
         compose = true
     }
+
+    packagingOptions {
+        pickFirst("lib/armeabi-v7a/libffmpegkit*.so")
+        pickFirst("lib/arm64-v8a/libffmpegkit*.so")
+        pickFirst("lib/x86/libffmpegkit*.so")
+        pickFirst("lib/x86_64/libffmpegkit*.so")
+    }
+
 }
 
 dependencies {
@@ -66,6 +80,7 @@ dependencies {
     implementation("io.insert-koin:koin-android:4.1.0")
     implementation("io.insert-koin:koin-androidx-compose:4.1.0")
     implementation("androidx.compose.material3:material3:1.2.1")
+    implementation("androidx.media3:media3-transformer:1.9.0")
     implementation("androidx.media3:media3-exoplayer:1.9.0")
     implementation("androidx.media3:media3-exoplayer-dash:1.9.0")
     implementation("androidx.media3:media3-ui:1.9.0")

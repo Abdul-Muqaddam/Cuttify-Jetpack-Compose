@@ -1,4 +1,4 @@
-package com.example.videotoaudioconverter.presentation.Premium_Screen
+package com.example.videotoaudioconverter.presentation.premium_Screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

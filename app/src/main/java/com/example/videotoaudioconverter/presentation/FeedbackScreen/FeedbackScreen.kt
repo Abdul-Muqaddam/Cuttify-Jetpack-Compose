@@ -1,4 +1,4 @@
-package com.example.videotoaudioconverter.presentation.FeedbackScreen
+package com.example.videotoaudioconverter.presentation.feedbackScreen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
