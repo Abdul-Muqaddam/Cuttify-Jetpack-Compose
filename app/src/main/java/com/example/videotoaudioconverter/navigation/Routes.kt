@@ -20,6 +20,12 @@ sealed class Routes {
     data object AudioMergeScreenRoute : Routes()
 
     @Serializable
+    data class VideoCutterScreenRoute(
+        val videoUri: String
+    ) : Routes()
+
+
+    @Serializable
     data object PrivacyPolicyScreenRoute : Routes()
 
     @Serializable

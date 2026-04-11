@@ -1,4 +1,4 @@
-package com.example.lifelinepro.presentation.comman
+package com.example.lifelinepro.presentation.Comman
 
 fun formatDurationVideo(durationMs: Int): String {
     val totalSeconds = durationMs / 1000

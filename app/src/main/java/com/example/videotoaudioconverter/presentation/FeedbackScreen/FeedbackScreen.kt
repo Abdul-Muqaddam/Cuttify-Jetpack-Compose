@@ -124,6 +124,15 @@ fun FeedbackScreen(navigateBackToSettingsScreen:()->Unit) {
                 .height(220.sdp),
             maxLines = 10,
             shape = RoundedCornerShape(10.sdp),
+            colors = OutlinedTextFieldDefaults.colors(
+                unfocusedTextColor = Color.Black,
+                focusedTextColor = Color.Black,
+                cursorColor = MyColors.green841,
+                focusedBorderColor = MyColors.Green058,
+                unfocusedBorderColor = Color.LightGray,
+                focusedLabelColor = MyColors.Green058,
+                unfocusedLabelColor = Color.Gray
+            )
             )
         Button (
             onClick = {

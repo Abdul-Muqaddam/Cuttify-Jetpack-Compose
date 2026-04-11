@@ -1,4 +1,4 @@
-package com.example.videotoaudioconverter.presentation.privacy_Policy_Screen
+package com.example.videotoaudioconverter.presentation.privacyPolicyScreen
 
 import android.annotation.SuppressLint
 import android.webkit.WebResourceError

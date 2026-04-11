@@ -1,4 +1,4 @@
-package com.example.videotoaudioconverter.presentation.all_video_files
+package com.example.videotoaudioconverter.presentation.allVideoFiles
 
 
 import android.net.Uri
@@ -19,11 +19,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import com.example.videotoaudioconverter.presentation.all_folder.VideoToAudioConverterViewModelState
-import com.example.videotoaudioconverter.presentation.all_video_files.components.EachVideoComponent
-import com.example.videotoaudioconverter.presentation.all_video_files.components.TopBarFilter
-import com.example.videotoaudioconverter.presentation.all_video_files.components.getAllVideos
-import com.example.videotoaudioconverter.presentation.comman_components.BottomSheet
+import com.example.videotoaudioconverter.presentation.allFolder.VideoToAudioConverterViewModelState
+import com.example.videotoaudioconverter.presentation.allVideoFiles.components.EachVideoComponent
+import com.example.videotoaudioconverter.presentation.allVideoFiles.components.TopBarFilter
+import com.example.videotoaudioconverter.presentation.allVideoFiles.components.getAllVideos
+import com.example.videotoaudioconverter.presentation.commanComponents.BottomSheet
 import com.example.videotoaudioconverter.ui.theme.MyColors
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

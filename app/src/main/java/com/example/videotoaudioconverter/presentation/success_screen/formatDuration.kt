@@ -1,4 +1,4 @@
-package com.example.videotoaudioconverter.presentation.success_screen
+package com.example.videotoaudioconverter.presentation.successScreen
 
 fun formatDurationAudio(millis: Int): String {
     val minutes = millis / 1000 / 60

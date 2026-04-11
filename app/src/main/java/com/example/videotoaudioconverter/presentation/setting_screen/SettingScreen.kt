@@ -1,4 +1,4 @@
-package com.example.videotoaudioconverter.presentation.setting_screen
+package com.example.videotoaudioconverter.presentation.settingScreen
 
 import android.Manifest
 import android.content.Context

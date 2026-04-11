@@ -1,4 +1,4 @@
-package com.example.videotoaudioconverter.presentation.LanguageScreen
+package com.example.videotoaudioconverter.presentation.languageScreen
 
 import android.util.Log
 import androidx.lifecycle.ViewModel

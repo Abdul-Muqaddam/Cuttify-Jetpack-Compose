@@ -1,4 +1,4 @@
-package com.example.videotoaudioconverter.presentation.home_screen
+package com.example.videotoaudioconverter.presentation.homeScreen
 
 
 import android.content.Intent
@@ -33,10 +33,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.window.Dialog
 import com.example.videotoaudioconverter.R
-import com.example.videotoaudioconverter.presentation.home_screen.component.FeatureCard
-import com.example.videotoaudioconverter.presentation.home_screen.component.MainText
-import com.example.videotoaudioconverter.presentation.home_screen.component.VerticalSpacer
-import com.example.videotoaudioconverter.presentation.main_screen.permission.VideoAndPhotoPermission
+import com.example.videotoaudioconverter.presentation.adsMob.NativeAdComposable
+import com.example.videotoaudioconverter.presentation.homeScreen.component.FeatureCard
+import com.example.videotoaudioconverter.presentation.homeScreen.component.MainText
+import com.example.videotoaudioconverter.presentation.homeScreen.component.VerticalSpacer
+import com.example.videotoaudioconverter.presentation.mainScreen.permission.VideoAndPhotoPermission
 import com.example.videotoaudioconverter.ui.theme.MyColors
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
@@ -49,7 +50,8 @@ fun HomeScreen(
     navigateToVideToAudioConverter: (String) -> Unit,
     navigateToSetRingtoneScreen:()->Unit,
     navigateToAudioCutterSelection:()->Unit,
-    navigateToAudioMergeScreen:()->Unit
+    navigateToAudioMergeScreen:()->Unit,
+    navigateToVideoCutterScreen: ()-> Unit
 ) {
     val context = LocalContext.current
     var isPermissionForVideoAndImage by remember { mutableStateOf(false) }
@@ -186,7 +188,7 @@ fun HomeScreen(
                 imgHeight = 30,
                 img = R.drawable.ic_video_cutter,
                 text = stringResource(R.string.video_cutter),
-                onClick = {}
+                onClick = {navigateToVideoCutterScreen()}
             )
             FeatureCard(
                 imgWidth = 50,
@@ -203,7 +205,10 @@ fun HomeScreen(
                 onClick = {navigateToSetRingtoneScreen()}
             )
         }
+        NativeAdComposable()
     }
+
+
     if (isPermissionPermanentlyDenied) {
         Dialog(
 

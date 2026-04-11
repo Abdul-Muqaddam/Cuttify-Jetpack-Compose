@@ -1,4 +1,4 @@
-package com.example.videotoaudioconverter.presentation.each_video_preview_and_player_screen
+package com.example.videotoaudioconverter.presentation.eachVideoPreviewAndPlayerScreen
 
 import android.content.Context
 import android.content.Intent
@@ -21,13 +21,16 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -42,7 +45,9 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import com.example.videotoaudioconverter.R
-import com.example.videotoaudioconverter.presentation.home_screen.component.VerticalSpacer
+import com.example.videotoaudioconverter.presentation.eachVideoPreviewAndPlayerScreen.EachVideoPreviewAndPlayerScreenViewModel
+import com.example.videotoaudioconverter.presentation.eachVideoPreviewAndPlayerScreen.extractAudioAndSave
+import com.example.videotoaudioconverter.presentation.homeScreen.component.VerticalSpacer
 import com.example.videotoaudioconverter.service.VideoToAudioService
 import com.example.videotoaudioconverter.ui.theme.MyColors
 import ir.kaaveh.sdpcompose.sdp
@@ -62,6 +67,7 @@ fun EachVideoPreviewAndPlayerScreen(
     videoUri: Uri,
     fileName: String
 ) {
+    var isConverting by remember { mutableStateOf(false) }
     val context = LocalContext.current
     val state by viewModel.state.collectAsState()
     LaunchedEffect(Unit) {
@@ -160,15 +166,16 @@ fun EachVideoPreviewAndPlayerScreen(
                     })
                 VerticalSpacer(16)
                 Button(
-
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(
                             MyColors.Green94F,
                             shape = RoundedCornerShape(20.sdp)
-                        ), colors = ButtonDefaults.buttonColors(Color.Transparent),
+                        ),
+                    colors = ButtonDefaults.buttonColors(Color.Transparent),
+                    enabled = !isConverting,
                     onClick = {
-
+                            isConverting = true
                         val intent = Intent(context, VideoToAudioService::class.java).apply {
                             putExtra("VIDEO_URI", videoUri.toString())
                             putExtra("FILE_NAME", state.videoFileNameWithoutExtension)
@@ -185,6 +192,7 @@ fun EachVideoPreviewAndPlayerScreen(
                             onComplete = { outputFile ->
 
                                 CoroutineScope(Dispatchers.Main).launch {
+                                    isConverting = false
                                     sendProgressToService(context, 100)
                                     navigateToSuccessScreen(
                                         outputFile.nameWithoutExtension,
@@ -199,6 +207,7 @@ fun EachVideoPreviewAndPlayerScreen(
                             },
                             onFailed = {
                                 CoroutineScope(Dispatchers.Main).launch {
+                                    isConverting = false
                                     Toast.makeText(
                                         context,
                                         "Something Went Wrong",
@@ -209,11 +218,19 @@ fun EachVideoPreviewAndPlayerScreen(
                         )
                     }
                 ) {
-                    Text(
-                        fontSize = 16.ssp,
-                        color = Color.White,
-                        text = stringResource(R.string.convert)
-                    )
+                    if (isConverting){
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(20.sdp),
+                            color = Color.White,
+                            strokeWidth = 2.sdp
+                        )
+                    }else{
+                        Text(
+                            fontSize = 16.ssp,
+                            color = Color.White,
+                            text = "Convert"
+                        )
+                    }
                 }
             }
         }

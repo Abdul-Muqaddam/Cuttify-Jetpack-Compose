@@ -2,9 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-
-
-
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROCESSING" />
@@ -73,6 +70,17 @@
             android:name=".service.AudioTrimForegroundService"
             android:exported="false"
             android:foregroundServiceType="mediaProcessing" />
+        <service
+            android:name=".service.VideoTrimmerService"
+            android:exported="false"
+            android:foregroundServiceType="mediaProcessing" />
+        <service
+            android:name=".service.AudioMergeService"
+            android:foregroundServiceType="mediaProcessing"
+            android:exported="false" />
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3940256099942544~3347511713"/>
 
     </application>
 

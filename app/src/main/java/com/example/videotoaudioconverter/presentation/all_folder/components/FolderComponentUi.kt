@@ -1,4 +1,4 @@
-package com.example.videotoaudioconverter.presentation.all_folder.components
+package com.example.videotoaudioconverter.presentation.allFolder.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

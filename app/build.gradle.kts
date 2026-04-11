@@ -74,6 +74,8 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.ffmpeg.kit.full)
+    implementation("com.google.android.gms:play-services-ads:23.0.0")
+    implementation("androidx.compose.material:material-icons-extended:1.7.0")
     implementation("com.airbnb.android:lottie-compose:6.6.7")
     implementation("com.github.Kaaveh:sdp-compose:1.1.0")
     implementation("io.insert-koin:koin-core:4.1.0")
@@ -86,9 +88,11 @@ dependencies {
     implementation("androidx.media3:media3-ui:1.9.0")
     implementation("androidx.media3:media3-session:1.9.0")
     implementation("androidx.media:media:1.7.1")
-    implementation("com.google.accompanist:accompanist-pager:0.31.3-beta")
-    implementation("com.google.accompanist:accompanist-pager-indicators:0.31.3-beta")
-    implementation("com.squareup.okhttp3:okhttp:4.11.0")
+    implementation("io.ktor:ktor-client-core:2.3.7")
+    implementation("io.ktor:ktor-client-cio:2.3.7")
+    implementation("io.ktor:ktor-client-content-negotiation:2.3.7")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.7")
+    implementation("com.android.billingclient:billing-ktx:6.2.0")
 
 
 

@@ -1,4 +1,4 @@
-package com.example.videotoaudioconverter.presentation.all_video_files.components
+package com.example.videotoaudioconverter.presentation.allVideoFiles.components
 
 import android.content.Context
 import android.net.Uri

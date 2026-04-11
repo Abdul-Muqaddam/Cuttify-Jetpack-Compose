@@ -1,4 +1,4 @@
-package com.example.videotoaudioconverter.presentation.video_to_audio_converter
+package com.example.videotoaudioconverter.presentation.videoToAudioConverter
 
 import android.content.Intent
 import android.net.Uri
@@ -36,11 +36,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.core.content.ContextCompat
 import com.example.videotoaudioconverter.R
-import com.example.videotoaudioconverter.presentation.all_folder.AllFolder
-import com.example.videotoaudioconverter.presentation.all_folder.VideoToAudioConverterViewModel
-import com.example.videotoaudioconverter.presentation.all_video_files.AllVideoFiles
-import com.example.videotoaudioconverter.presentation.home_screen.component.VerticalSpacer
-import com.example.videotoaudioconverter.presentation.video_to_audio_converter.component.TopBar
+import com.example.videotoaudioconverter.presentation.allFolder.AllFolder
+import com.example.videotoaudioconverter.presentation.allFolder.VideoToAudioConverterViewModel
+import com.example.videotoaudioconverter.presentation.allVideoFiles.AllVideoFiles
+import com.example.videotoaudioconverter.presentation.homeScreen.component.VerticalSpacer
+import com.example.videotoaudioconverter.presentation.videoToAudioConverter.component.TopBar
 import com.example.videotoaudioconverter.service.VideoToAudioService
 import com.example.videotoaudioconverter.ui.theme.MyColors
 import ir.kaaveh.sdpcompose.sdp

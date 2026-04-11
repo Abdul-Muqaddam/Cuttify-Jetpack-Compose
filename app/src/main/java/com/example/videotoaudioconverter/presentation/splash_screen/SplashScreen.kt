@@ -1,4 +1,4 @@
-package com.example.videotoaudioconverter.presentation.splash_screen
+package com.example.videotoaudioconverter.presentation.splashScreen
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
@@ -17,10 +17,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import com.example.videotoaudioconverter.R
-import com.example.videotoaudioconverter.presentation.utils.AnimationLottie
+import com.example.videotoaudioconverter.presentation.Utils.AnimationLottie
 import com.example.videotoaudioconverter.ui.theme.MyColors
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
+import kotlinx.coroutines.delay
 
 @Composable
 fun SplashScreen(navigateToHome: () -> Unit) {
@@ -31,6 +32,7 @@ fun SplashScreen(navigateToHome: () -> Unit) {
             targetValue = 1f,
             animationSpec = tween(durationMillis = 5000)
         )
+
         navigateToHome()
     }
 

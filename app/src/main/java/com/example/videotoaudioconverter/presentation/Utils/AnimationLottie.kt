@@ -1,4 +1,4 @@
-package com.example.videotoaudioconverter.presentation.utils
+package com.example.videotoaudioconverter.presentation.Utils
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue

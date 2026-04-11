@@ -1,4 +1,4 @@
-package com.example.videotoaudioconverter.presentation.comman_components
+package com.example.videotoaudioconverter.presentation.commanComponents
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,7 +21,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.example.videotoaudioconverter.R
-import com.example.videotoaudioconverter.presentation.home_screen.component.VerticalSpacer
+import com.example.videotoaudioconverter.presentation.commanComponents.BottomSheetViewModel
+import com.example.videotoaudioconverter.presentation.homeScreen.component.VerticalSpacer
+import com.example.videotoaudioconverter.presentation.homeScreen.component.VerticalSpacer
 import com.example.videotoaudioconverter.ui.theme.MyColors
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp

@@ -1,4 +1,4 @@
-package com.example.videotoaudioconverter.presentation.comman_components
+package com.example.videotoaudioconverter.presentation.commanComponents
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

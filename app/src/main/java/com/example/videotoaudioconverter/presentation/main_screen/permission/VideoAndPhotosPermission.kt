@@ -1,4 +1,4 @@
-package com.example.videotoaudioconverter.presentation.main_screen.permission
+package com.example.videotoaudioconverter.presentation.mainScreen.permission
 
 import android.app.Activity
 import android.content.Context

@@ -1,4 +1,4 @@
-package com.example.videotoaudioconverter.presentation.success_screen
+package com.example.videotoaudioconverter.presentation.successScreen
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.runtime.mutableStateOf

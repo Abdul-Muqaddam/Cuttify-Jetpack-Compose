@@ -1,4 +1,4 @@
-package com.example.videotoaudioconverter.presentation.home_screen.component
+package com.example.videotoaudioconverter.presentation.homeScreen.component
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable

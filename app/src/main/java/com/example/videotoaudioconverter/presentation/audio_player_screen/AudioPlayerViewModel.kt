@@ -1,4 +1,4 @@
-package com.example.videotoaudioconverter.presentation.audio_player_screen
+package com.example.videotoaudioconverter.presentation.audioPlayerScreen
 
 import android.app.Application
 import android.content.ComponentName
@@ -25,10 +25,9 @@ import androidx.lifecycle.application
 import androidx.lifecycle.viewModelScope
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
-import com.example.videotoaudioconverter.presentation.audio_player_screen.component.AudioFile
-import com.example.lifelinepro.presentation.comman.formatDurationAudio
+import com.example.lifelinepro.presentation.Comman.formatDurationAudio
 import com.example.videotoaudioconverter.player.AudioController
-import com.example.videotoaudioconverter.presentation.success_screen.formatDurationAudio
+import com.example.videotoaudioconverter.presentation.successScreen.formatDurationAudio
 import com.example.videotoaudioconverter.service.AudioPlayerService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -38,6 +37,7 @@ import android.content.ContentValues
 import android.os.Environment
 import android.media.MediaScannerConnection
 import androidx.core.content.FileProvider
+import com.example.videotoaudioconverter.presentation.audioPlayerScreen.component.AudioFile
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext

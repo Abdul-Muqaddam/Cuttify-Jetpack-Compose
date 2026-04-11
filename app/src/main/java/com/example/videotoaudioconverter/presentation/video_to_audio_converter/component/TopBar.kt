@@ -1,4 +1,4 @@
-package com.example.videotoaudioconverter.presentation.video_to_audio_converter.component
+package com.example.videotoaudioconverter.presentation.videoToAudioConverter.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -21,9 +21,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import com.example.videotoaudioconverter.R
-import com.example.videotoaudioconverter.presentation.all_folder.VideoToAudioConverterViewModelState
-import com.example.videotoaudioconverter.presentation.videos_inside_the_folder_screen.VideoInsideTheFolderViewModel
-import com.example.videotoaudioconverter.presentation.videos_inside_the_folder_screen.VideosInsideTheFolderViewModelState
+import com.example.videotoaudioconverter.presentation.allFolder.VideoToAudioConverterViewModelState
+import com.example.videotoaudioconverter.presentation.videosInsideTheFolderScreen.VideoInsideTheFolderViewModel
+import com.example.videotoaudioconverter.presentation.videosInsideTheFolderScreen.VideosInsideTheFolderViewModelState
 import com.example.videotoaudioconverter.ui.theme.MyColors
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
@@ -33,7 +33,7 @@ fun TopBar(
     title:String,
     onSearchChange: (String) -> Unit,
     state2: VideosInsideTheFolderViewModelState =VideosInsideTheFolderViewModelState(),
-    state: VideoToAudioConverterViewModelState=VideoToAudioConverterViewModelState() ,
+    state: VideoToAudioConverterViewModelState =VideoToAudioConverterViewModelState(),
     navigateBack: () -> Unit,
     searchIconClicked: () -> Unit,
     crossIconClicked: () -> Unit

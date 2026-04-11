@@ -1,8 +1,6 @@
-package com.example.videotoaudioconverter.presentation.RateUsScreen
+package com.example.videotoaudioconverter.presentation.rateUsScreen
 
 import androidx.lifecycle.ViewModel
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update

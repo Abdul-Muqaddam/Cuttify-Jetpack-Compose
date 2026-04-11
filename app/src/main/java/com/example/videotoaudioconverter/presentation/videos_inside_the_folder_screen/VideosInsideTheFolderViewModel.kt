@@ -1,4 +1,4 @@
-package com.example.videotoaudioconverter.presentation.videos_inside_the_folder_screen
+package com.example.videotoaudioconverter.presentation.videosInsideTheFolderScreen
 
 import android.content.Context
 import android.net.Uri
@@ -8,8 +8,8 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.videotoaudioconverter.presentation.all_folder.VideoFiles
-import com.example.videotoaudioconverter.presentation.all_video_files.components.getFileName
+import com.example.videotoaudioconverter.presentation.allFolder.VideoFiles
+import com.example.videotoaudioconverter.presentation.allVideoFiles.components.getFileName
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

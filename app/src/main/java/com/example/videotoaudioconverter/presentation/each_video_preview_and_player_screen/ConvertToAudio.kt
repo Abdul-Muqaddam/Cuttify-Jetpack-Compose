@@ -1,4 +1,4 @@
-package com.example.videotoaudioconverter.presentation.each_video_preview_and_player_screen
+package com.example.videotoaudioconverter.presentation.eachVideoPreviewAndPlayerScreen
 
 import android.content.Context
 import android.content.Intent

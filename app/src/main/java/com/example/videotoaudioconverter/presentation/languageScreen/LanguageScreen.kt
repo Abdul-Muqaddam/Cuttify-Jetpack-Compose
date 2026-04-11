@@ -92,9 +92,6 @@ fun LanguageScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 10.sdp),
-                shape = RoundedCornerShape(12.sdp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                elevation = CardDefaults.cardElevation(2.sdp)
             ) {
                 Row(
                     modifier = Modifier

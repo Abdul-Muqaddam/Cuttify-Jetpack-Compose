@@ -1,4 +1,4 @@
-package com.example.videotoaudioconverter.presentation.audio_cutter_screen
+package com.example.videotoaudioconverter.presentation.audioCutterScreen
 
 import android.content.Context
 import android.net.Uri
@@ -50,8 +50,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import com.example.videotoaudioconverter.R
-import com.example.videotoaudioconverter.presentation.all_folder.VideoToAudioConverterViewModel
 import com.example.videotoaudioconverter.ui.theme.MyColors
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
@@ -71,7 +69,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.example.videotoaudioconverter.R
 import com.example.videotoaudioconverter.audio.AudioExporter
+import com.example.videotoaudioconverter.presentation.audio_cutter_screen.AudioCutterViewModel
+import com.example.videotoaudioconverter.presentation.audio_cutter_screen.AudioTrimCallback
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
 import kotlinx.coroutines.flow.collectLatest
@@ -85,7 +86,7 @@ import kotlin.math.roundToInt
 fun AudioCutterScreen(
     audioPath: String,
     audioTitle: String,
-    navigateBack: () -> Unit,
+    navigateBackToHomeScreen: () -> Unit,
     navigateToSuccess: (String, String) -> Unit,
     viewModel: AudioCutterViewModel = koinViewModel()
 ) {
@@ -93,6 +94,7 @@ fun AudioCutterScreen(
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     var fileName by remember { mutableStateOf(audioTitle) }
+
 
     LaunchedEffect(viewModel) {
         AudioTrimCallback.viewModel = viewModel
@@ -126,15 +128,17 @@ fun AudioCutterScreen(
         }
     }
 
+
     Scaffold(
-        topBar = { AudioCutterTopBar(title = "Audio Cutter", navigateBack = navigateBack) }
+        modifier = Modifier.statusBarsPadding(),
+        topBar = { AudioCutterTopBar(title = "Audio Cutter", navigateBack = navigateBackToHomeScreen) }
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.White)
                 .padding(paddingValues)
-                .padding(horizontal = 18.dp)
+                .padding(horizontal = 10.dp)
         ) {
             Spacer(modifier = Modifier.height(20.dp))
             Text(
@@ -263,16 +267,16 @@ fun AudioCutterScreen(
 @Composable
 fun AudioCutterTopBar(title: String, navigateBack: () -> Unit) {
     Row(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 18.dp, vertical = 15.dp),
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 30.dp, vertical = 15.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        IconButton(onClick = navigateBack) {
             Icon(
                 painter = painterResource(R.drawable.ic_back_arrow),
                 contentDescription = "Back",
-                tint = MyColors.MainColor
+                tint = MyColors.MainColor,
+                modifier = Modifier.clickable{navigateBack()}
             )
-        }
+
         Spacer(modifier = Modifier.width(15.dp))
         Text(
             text = title,

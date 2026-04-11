@@ -1,4 +1,4 @@
-package com.example.videotoaudioconverter.presentation.all_video_files.components
+package com.example.videotoaudioconverter.presentation.allVideoFiles.components
 
 import android.graphics.Bitmap
 import android.net.Uri
@@ -27,7 +27,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import com.example.videotoaudioconverter.R
-import com.example.videotoaudioconverter.presentation.home_screen.component.HorizontalSpacer
+import com.example.videotoaudioconverter.presentation.allVideoFiles.components.getVideoDuration
+import com.example.videotoaudioconverter.presentation.allVideoFiles.components.getVideoThumbnail
+import com.example.videotoaudioconverter.presentation.homeScreen.component.HorizontalSpacer
 import com.example.videotoaudioconverter.ui.theme.MyColors
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
@@ -87,4 +89,9 @@ fun EachVideoComponent(videoClicked:(Uri, String)->Unit, video: Uri, fileName: S
 //        val fileName = getFileName(context = context, uri = video)
         Text(fontSize = 12.ssp, color = MyColors.Green058, text = fileName, maxLines = 1)
     }
+}
+
+@Composable
+fun HorizontalSpacer(x0: Int) {
+    TODO("Not yet implemented")
 }

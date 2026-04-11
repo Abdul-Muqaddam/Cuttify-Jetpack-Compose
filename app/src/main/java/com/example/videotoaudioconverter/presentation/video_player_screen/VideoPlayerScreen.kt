@@ -1,4 +1,4 @@
-package com.example.videotoaudioconverter.presentation.video_player_screen
+package com.example.videotoaudioconverter.presentation.videoPlayerScreen
 
 import android.net.Uri
 import android.view.ViewGroup

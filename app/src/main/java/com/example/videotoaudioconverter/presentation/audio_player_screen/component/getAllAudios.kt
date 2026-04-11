@@ -1,4 +1,4 @@
-package com.example.videotoaudioconverter.presentation.audio_player_screen.component
+package com.example.videotoaudioconverter.presentation.audioPlayerScreen.component
 
 import android.content.ContentUris
 import android.content.Context

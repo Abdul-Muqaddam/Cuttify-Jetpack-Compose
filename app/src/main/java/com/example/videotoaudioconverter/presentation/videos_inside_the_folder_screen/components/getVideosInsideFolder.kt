@@ -1,4 +1,4 @@
-package com.example.videotoaudioconverter.presentation.videos_inside_the_folder_screen.components
+package com.example.videotoaudioconverter.presentation.videosInsideTheFolderScreen.components
 
 import android.content.ContentUris
 import android.content.Context

@@ -1,4 +1,4 @@
-package com.example.videotoaudioconverter.presentation.videos_inside_the_folder_screen
+package com.example.videotoaudioconverter.presentation.videosInsideTheFolderScreen
 
 import android.net.Uri
 import android.os.Build
@@ -18,11 +18,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.example.videotoaudioconverter.R
-import com.example.videotoaudioconverter.presentation.all_video_files.components.EachVideoComponent
-import com.example.videotoaudioconverter.presentation.all_video_files.components.TopBarFilter
-import com.example.videotoaudioconverter.presentation.comman_components.BottomSheet
-import com.example.videotoaudioconverter.presentation.video_to_audio_converter.component.TopBar
-import com.example.videotoaudioconverter.presentation.videos_inside_the_folder_screen.components.getVideosInFolder
+import com.example.videotoaudioconverter.presentation.allVideoFiles.components.EachVideoComponent
+import com.example.videotoaudioconverter.presentation.allVideoFiles.components.TopBarFilter
+import com.example.videotoaudioconverter.presentation.commanComponents.BottomSheet
+import com.example.videotoaudioconverter.presentation.videoToAudioConverter.component.TopBar
+import com.example.videotoaudioconverter.presentation.videosInsideTheFolderScreen.VideoInsideTheFolderViewModel
+import com.example.videotoaudioconverter.presentation.videosInsideTheFolderScreen.components.getVideosInFolder
 import org.koin.androidx.compose.koinViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
